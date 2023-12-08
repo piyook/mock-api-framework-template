@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "start": "tsx --watch ./src/index.ts"
+    "start": "tsx watch ./src/server.ts"
   },
   "dependencies": {
     "@mswjs/http-middleware": "^0.9.2",

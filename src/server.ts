@@ -1,5 +1,5 @@
 import { createServer } from "@mswjs/http-middleware";
-import { handlers } from "./mocks/handlers.js";
+import { handlers } from "./handlers/handlers.js";
 
 const httpServer = createServer(...handlers);
 
