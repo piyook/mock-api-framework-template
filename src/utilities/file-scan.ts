@@ -15,6 +15,7 @@ export default async function getApiPaths() {
     const apiFolder = `${__dirname}/../api`;
 
     const apiHandlers: HttpHandler[] = [];
+    const apiPaths: string[] = [];
 
     const files = fs.readdirSync(apiFolder);
 
@@ -25,6 +26,7 @@ export default async function getApiPaths() {
         if (stats.isDirectory()) {
             // Get the directory name
             console.log(`Api Path: /${file}`);
+            apiPaths.push(file);
 
             // Import index.ts file (assuming it's in each directory)
             try {
@@ -40,5 +42,5 @@ export default async function getApiPaths() {
         }
     }
 
-    return apiHandlers;
+    return { apiHandlers, apiPaths };
 }
