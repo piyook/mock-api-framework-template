@@ -1,0 +1,58 @@
+
+added 138 packages, and audited 139 packages in 17s
+
+24 packages are looking for funding
+  run `npm fund` for details
+
+1 moderate severity vulnerability
+
+To address all issues, run:
+  npm audit fix
+
+Run `npm audit` for details.
+#0 building with "default" instance using docker driver
+
+#1 [mswtest internal] load build definition from Dockerfile
+#1 transferring dockerfile: 337B done
+#1 DONE 0.0s
+
+#2 [mswtest internal] load metadata for docker.io/library/node:lts-alpine
+#2 DONE 0.5s
+
+#3 [mswtest internal] load .dockerignore
+#3 transferring context: 375B done
+#3 DONE 0.0s
+
+#4 [mswtest 1/6] FROM docker.io/library/node:lts-alpine@sha256:291e84d956f1aff38454bbd3da38941461ad569a185c20aa289f71f37ea08e23
+#4 DONE 0.0s
+
+#5 [mswtest 2/6] WORKDIR /usr/src/app
+#5 CACHED
+
+#6 [mswtest internal] load build context
+#6 transferring context: 67.97kB 0.0s done
+#6 DONE 0.0s
+
+#7 [mswtest 3/6] COPY [package.json, package-lock.json*, npm-shrinkwrap.json*, ./]
+#7 DONE 0.1s
+
+#8 [mswtest 4/6] RUN npm install --production --silent && mv node_modules ../
+#8 8.637 npm notice 
+#8 8.637 npm notice New minor version of npm available! 10.5.2 -> 10.7.0
+#8 8.637 npm notice Changelog: <https://github.com/npm/cli/releases/tag/v10.7.0>
+#8 8.637 npm notice Run `npm install -g npm@10.7.0` to update!
+#8 8.637 npm notice 
+#8 DONE 13.6s
+
+#9 [mswtest 5/6] COPY . .
+#9 DONE 0.6s
+
+#10 [mswtest 6/6] RUN chown -R node /usr/src/app
+#10 DONE 1.6s
+
+#11 [mswtest] exporting to image
+#11 exporting layers
+#11 exporting layers 2.8s done
+#11 writing image sha256:8c94bd4f9a79c022ccae15e4b8268318e6082ca6c7439f49bfae9b1a30fadcc0 0.0s done
+#11 naming to docker.io/library/mswtest 0.1s done
+#11 DONE 3.0s
