@@ -24,10 +24,10 @@ export default async function getApiPaths() {
       // Import index.ts file (assuming it's in each directory)
       try {
         const { default: indexFile } = await import(
-          `file://${path.join(filePath, "index.ts")}`
+          `file://${path.join(filePath, "api.ts")}`
         );
         // add new handlers to return array - remember to spread these out as may be more than one
-        apiHandlers.push(...indexFile);
+        apiHandlers.push(...indexFile(file));
         // Do something with the imported file
       } catch (error) {
         console.error("Error importing index.ts file:", error);
