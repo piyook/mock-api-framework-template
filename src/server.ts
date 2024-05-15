@@ -4,7 +4,7 @@ import getApiPaths from './utilities/file-scan.js';
 
 const httpServer = createServer(...(await getApiPaths()));
 
-httpServer.listen(9090);
+httpServer.listen(8000);
 
 userSeeder();
 postSeeder();
