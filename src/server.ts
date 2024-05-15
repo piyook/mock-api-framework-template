@@ -1,8 +1,6 @@
-import { createServer } from "@mswjs/http-middleware";
-import { userSeeder, postSeeder } from "./seeders/index.js";
-import getApiPaths from "./utilities/file-scan.js";
-
-console.log("HANDLERS:", await getApiPaths());
+import { createServer } from '@mswjs/http-middleware';
+import { userSeeder, postSeeder } from './seeders/index.js';
+import getApiPaths from './utilities/file-scan.js';
 
 const httpServer = createServer(...(await getApiPaths()));
 
