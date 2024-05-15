@@ -1,0 +1,10 @@
+services:
+  mswtest:
+    image: mswtest
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 9090:9090

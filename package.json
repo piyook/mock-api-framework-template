@@ -1,15 +1,18 @@
 {
   "type": "module",
   "scripts": {
-    "start": "tsx watch ./src/server.ts"
+    "dev": "tsx watch ./src/server.ts",
+    "start": "docker compose up -d --force-recreate",
+    "stop": "docker compose down --volumes",
+    "restart": "npm stop && npm start",
+    "nuke": "bash nuke.sh"
   },
   "dependencies": {
     "@mswjs/http-middleware": "^0.10.1",
     "tsx": "^4.10.2",
-    "typescript": "^5.4.5"
-  },
-  "devDependencies": {
+    "typescript": "^5.4.5",
     "@faker-js/faker": "^8.4.1",
     "@mswjs/data": "^0.16.1"
-  }
+  },
+  "devDependencies": {}
 }
