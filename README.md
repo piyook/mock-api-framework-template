@@ -40,7 +40,7 @@ To start in docker run
 npm start
 ```
 
-Your apis will be available on localhost:8000/api byt default but this can be customised - see later.
+Your apis will be available on localhost:8000/api by default but this can be customised - see later.
 
 To stop and remove containers run
 
@@ -66,7 +66,6 @@ To run directly on your local machine not using docker
 
 ```
 npm run dev
-
 ```
 
 ## Using the Mock API Framework
@@ -75,9 +74,9 @@ To create a new api path (E.g api/users)
 
 ### 1. Create a **new folder** within the api folder the api path name you want:
 
-    ```
-    mkdir src/api/users
-    ```
+```
+mkdir src/api/users
+```
 
 ### 2. Create an **api.ts** file in this new folder and add handler logic here - see https://github.com/mswjs/msw for information on writing handlers.
 
@@ -85,9 +84,9 @@ Also take a look at the example handlers in the api folder.
 
 The mock api framework uses the msw-data utility - see https://github.com/mswjs/data and a full rest or graphql api can be automatically set-up from this without having to define each handler using the format below
 
-    ```
-    ...db.user.toHandlers('rest')
-    ```
+```
+...db.user.toHandlers('rest')
+```
 
 ### 3. Create a database
 
@@ -151,6 +150,10 @@ Available endpoints are listed at the url root
 ```
 http://localhost:8000
 ```
+
+### 8. Templates
+
+The templates directory contains useful templates for different type of handlers, models and seeders
 
 ## Customisation
 
