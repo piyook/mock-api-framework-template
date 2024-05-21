@@ -142,7 +142,7 @@ To create a new api path (E.g api/users)
 ### Change api url prefix
 
 By default the api paths with be prefixed with "api/" this can be modified with the
-USE_API_URL_PREFIX environment variable.
+USE_API_URL_PREFIX environment variable in the .env file.
 
 By setting this to blank then the path will just be the api name E.g localhost:8000/users
 
@@ -154,11 +154,9 @@ USE_API_URL_PREFIX=things
 
 will give localhost:8000/things/users
 
-**Note**: This value needs to be changed in the .env file when running directly on a local machine and in the docker-compose.yaml file for running in docker containers.
-
 ### Change port number
 
-By default this is set to 8000 but can be changed by setting the SERVER_PORT in the .env or docker-compose.yaml file:
+By default this is set to 8000 but can be changed by setting the SERVER_PORT in the .env file:
 
 ```
 SERVER_PORT=1234
