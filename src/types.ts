@@ -4,10 +4,3 @@ export type Post = {
     title: string;
     body: string;
 };
-
-export type Cat = {
-    id: number;
-    type: string;
-    description: string;
-    price: string;
-};
