@@ -8,5 +8,6 @@ services:
       NODE_ENV: development
       HUSKY: 0
       SERVER_PORT: 8000
+      USE_API_URL_PREFIX: api
     ports:
       - 8000:8000

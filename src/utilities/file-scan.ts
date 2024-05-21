@@ -19,13 +19,17 @@ export default async function getApiPaths() {
 
     const files = fs.readdirSync(apiFolder);
 
+    const prefix = process.env?.USE_API_URL_PREFIX
+        ? process.env.USE_API_URL_PREFIX + '/'
+        : '';
+
     for (const file of files) {
         const filePath = path.join(apiFolder, file);
         const stats = fs.statSync(filePath);
 
         if (stats.isDirectory()) {
             // Get the directory name
-            console.log(`Api Path: /${file}`);
+            console.log(`Api Path: ${prefix}${file}`);
             apiPaths.push(file);
 
             // Import index.ts file (assuming it's in each directory) - this returns a promise
@@ -46,7 +50,9 @@ export default async function getApiPaths() {
         .then((handlers) => {
             for (const [index, handler] of handlers.entries()) {
                 // Add new handlers with the desired apiPath to return array - remember to spread these out as may be more than one
-                apiHandlers.push(...handler.default(apiPaths[index]));
+                apiHandlers.push(
+                    ...handler.default(`${prefix}${apiPaths[index]}`),
+                );
             }
         })
         .then(() => {
