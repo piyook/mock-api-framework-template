@@ -4,4 +4,4 @@ import { user } from './user.js';
 import { post } from './post.js';
 
 // Create database model
-export const db = factory({ ...cat, ...user, ...post });
+export const db = factory({ cat, user, post });
