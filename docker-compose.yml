@@ -1,6 +1,6 @@
 services:
   mswtest:
-    image: mswtest
+    image: ${PROJECT_NAME}:latest
     build:
       context: .
       dockerfile: ./Dockerfile
