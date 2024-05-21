@@ -7,5 +7,6 @@ services:
     environment:
       NODE_ENV: development
       HUSKY: 0
+      SERVER_PORT: 8000
     ports:
       - 8000:8000
