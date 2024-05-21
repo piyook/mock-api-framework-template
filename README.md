@@ -16,9 +16,9 @@ Install dependencies.
 
 #### Git LFS
 
-Use git LFS to handle large files such as the database files or image files.
+You can use git LFS to handle large files such as the database files or image files.
 
-Use LFS to track database files by running the command below
+Use LFS to track large database files by running the command below
 
 ```
 git lfs track --filename src/data/data.json
