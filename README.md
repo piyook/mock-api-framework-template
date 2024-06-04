@@ -151,7 +151,15 @@ Available endpoints are listed at the url root
 http://localhost:8000
 ```
 
-### 8. Templates
+### 8. AWS Lambda Functions
+
+Lambda functions can be developed in the mock framework and then used in AWS CDK code.
+
+Lambda functions are stored in the src/lambdas directory.
+
+When a lambda is called from an api, the MSW/ExpressJS request object needs to be converted into an AWS API Gateway Proxy Event object using the requestToApiGatewayProxyEvent function in utilities. This mocks how a real API Gateway sends URL queries and body data to a Lambda so lambda code developed in should work in an API Rest Gateway.
+
+### 9. Templates
 
 The templates directory contains useful templates for different type of handlers, models and seeders
 
