@@ -13,9 +13,11 @@ function handler(pathName: string) {
                 response: `this is a GET test response from ${pathName}`,
             });
         }),
-        http.post(`/${pathName}`, ({ request }) => {
+        http.post(`/${pathName}`, async ({ request }) => {
+            // Get Body Data using json(), text() or formData() depending on what is sent
+            const bodyData = await request.json();
             return HttpResponse.json({
-                response: `this is a POST test response from ${pathName}`,
+                response: `this is a POST test response from ${pathName} with bodyData ${JSON.stringify(bodyData)}`,
             });
         }),
     ];
