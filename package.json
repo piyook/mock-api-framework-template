@@ -27,6 +27,7 @@
     "devDependencies": {
         "@commitlint/cli": "^19.3.0",
         "@commitlint/config-conventional": "^19.2.2",
+        "@types/aws-lambda": "^8.10.138",
         "husky": "^9.0.11",
         "lint-staged": "^15.2.2",
         "prettier": "3.2.5",
