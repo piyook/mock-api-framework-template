@@ -8,17 +8,21 @@ const prefix = process.env?.USE_API_URL_PREFIX
 const homePage = (apiPaths: string[]) => {
     const htmlString = `
         <html>
-        <body style="background-color: #4B6A03; display: flex; flex-direction: column; justify-content: center; align-items: center; height:100%; font-family: sans-serif;">
+        <body style="margin: 0px; background-color: #00200B; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height:100vh; font-family: sans-serif;">
 
-        <div style="text-align: center; width: 80%; background-color: #E9FCBC; padding:50px; border-radius: 10px; ">
-        <h1> Mock API Server Is Running</h1>
+            <div style="text-align: center; width: 80%;padding:50px; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; color:white">
+                <h1 style="padding-bottom: 10px;"> Mock LLM Server: <span class="highlight">Running</span></h1>
+                <div class="spacer"></div>
 
-        <h3 style="color: green; font-weight: bold;padding-bottom: 50px;">http://localhost:${process.env.SERVER_PORT} </h3>
+         <div style="text-align:left;width:clamp(650px, 800px, 90%)); ">
+                <h3 class="info">Server Address: <span class="highlight">localhost</span> </h3>
+                <h3 class="info">Server Port: <span class="highlight">${process.env?.SERVER_PORT?.toUpperCase() ?? 'NONE'}</span> </h3>
+                <h3 class="info">Server URL Prefix: <span class="highlight">${process.env?.USE_API_URL_PREFIX?.toLowerCase() ?? 'NONE'}</span> </h3>
         
-        <h3  style="text-align: left; color:grey">API endpoints*:</h3>
+        <h3  class="info">API endpoints*:</h3>
         <div>
      
-        ${apiPaths.map((path) => '<h3> <a style="color: green; font-weight: bold" href="' + prefix + path + '">/' + prefix + path + '</a></h3>').join('')}
+        ${apiPaths.map((path) => '<h3 class="endpoint"> <a class="highlight endpoint" href="' + prefix + path + '">/' + prefix + path + '</a></h3>').join('')}
 
         </div>
 
@@ -27,6 +31,45 @@ const homePage = (apiPaths: string[]) => {
         </div>
       
         </body>
+             <style> 
+            
+            .highlight { 
+                background-color:#28831C;
+                padding:5px 10px 5px 10px;
+                border-radius: 5px;
+                font-weight: bold;
+                color: white;
+                margin-left: 15px;
+                border: 3px white solid;
+            }
+
+            .endpoint {
+            text-align: right;
+            margin: 20px 0px 20px 0px;
+            opacity:0.8;
+            transition: all 0.5s ease-in-out;
+            }
+
+            .endpoint:hover {
+                translate: 20px 0px;
+                opacity: 1;
+                transform: scale(1.1);
+            }
+
+            .info {
+                font-weight: bold;
+                padding: 10px 0px 10px 0px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .spacer {
+                width:100%;
+                border-bottom: 1px grey solid;
+                margin: 40px 0px 20px 0px;
+            }
+            </style>
         </html>
     `;
 
