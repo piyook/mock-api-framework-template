@@ -42,6 +42,10 @@ npm start
 
 Your apis will be available on localhost:8000/api by default but this can be customised - see later.
 
+A list of all endpoints can be viewed on http://localhost:8000/
+
+![alt text](image.png)
+
 To stop and remove containers run
 
 ```
@@ -159,7 +163,17 @@ Lambda functions are stored in the src/lambdas directory.
 
 When a lambda is called from an api, the MSW/ExpressJS request object needs to be converted into an AWS API Gateway Proxy Event object using the requestToApiGatewayProxyEvent function in utilities. This mocks how a real API Gateway sends URL queries and body data to a Lambda so lambda code developed in should work in an API Rest Gateway.
 
-### 9. Templates
+### 9. Images
+
+Images should be stored in the src/images folder.  
+They can be accessed using the format http://localhost:8000/api/images/{image_filename}.  
+E.g
+
+    ```
+    http://localhost:8000/api/images/placeholder.png
+    ```
+
+### 10. Templates
 
 The templates directory contains useful templates for different type of handlers, models and seeders
 
