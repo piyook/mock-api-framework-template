@@ -1,0 +1,56 @@
+[
+    {
+        "metaData": {
+            "docHeader": "Test Document",
+            "docSubHeader": "JSON data test",
+            "docNumber": "J1234-56"
+        },
+        "sections": [
+            {
+                "sectionNumber": 1,
+                "sectionTitle": "Section 1 Title",
+                "sectionContent": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+
+                "sectionImages": [
+                    {
+                        "imageUrl": "http://localhost:8000/api/images/placeholder.png",
+                        "imageDescription": "image of 500"
+                    },
+                    {
+                        "imageUrl": "http://localhost:8000/api/images/placeholder.png",
+                        "imageDescription": "image of 400"
+                    },
+                    {
+                        "imageUrl": "http://localhost:8000/api/images/placeholder.png",
+                        "imageDescription": "image of 300"
+                    },
+                    {
+                        "imageUrl": "http://localhost:8000/api/images/placeholder.png",
+                        "imageDescription": "image of 200"
+                    }
+                ]
+            },
+            {
+                "sectionNumber": 2,
+                "sectionTitle": "Section 2 Title",
+                "sectionContent": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "sectionImages": []
+            },
+            {
+                "sectionNumber": 3,
+                "sectionTitle": "Section 3 title",
+                "sectionContent": "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                "sectionImages": [
+                    {
+                        "imageUrl": "http://localhost:8000/api/images/placeholder.png",
+                        "imageDescription": "image of 400"
+                    },
+                    {
+                        "imageUrl": "http://localhost:8000/api/images/placeholder.png",
+                        "imageDescription": "image of 300"
+                    }
+                ]
+            }
+        ]
+    }
+]
