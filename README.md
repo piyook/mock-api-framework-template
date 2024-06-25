@@ -6,7 +6,7 @@ The purpose of this project is to provide a quick-to-set-up standalone local moc
 
 This can be used for testing API code and logic before deploying to live servers or quickly producing API endpoints for rapid prototyping for developing frontend clients for web or mobile.
 
-The project is built using MSW and can be run directly on a local machine or in docker containers.
+The project is built using MSW and can be run directly on a local machine or in Docker containers.
 
 ## Set-up
 
@@ -14,9 +14,13 @@ Clone the repo or use the template button directly in GitHub to set-up a new rep
 
 Install dependencies.
 
+#### Requirements
+
+Node 20+ and Docker.
+
 #### Git LFS
 
-You can use git LFS to handle large files such as database files or image files.
+You can use git LFS to handle large files such as database files, videos or image files.
 
 Use LFS to track large database files by running the command below
 
@@ -34,17 +38,19 @@ git lfs track "*.png"
 
 #### Docker
 
-To start in docker run
+To start in Docker run
 
 ```
 npm start
 ```
 
-Your apis will be available on localhost:8000/api by default but this can be customised - see later.
+The list of available apis can be viewed on localhost:8000/api by default but this can be customised - see later.
 
 A list of all endpoints can be viewed on http://localhost:8000/
 
 ![alt text](image.png)
+
+### Useful Commands
 
 To stop and remove containers run
 
@@ -66,7 +72,7 @@ npm run nuke
 
 #### Local Machine
 
-To run directly on your local machine not using docker
+To run directly on your local machine instead of Docker
 
 ```
 npm run dev
@@ -74,17 +80,28 @@ npm run dev
 
 ## Using the Mock API Framework
 
-To create a new api path (E.g api/users)
+The framework is written in TypeScript and can :
 
-### 1. Create a **new folder** within the api folder the api path name you want:
+-   Serve Files (JSON or text)
+-   Serve Media : Images and Videos
+-   Be used to write and test AWS Lambda Functions
+-   Use custom middleware to transform input/output
+-   Serve random Database seed data
+-   Serve persisted mock data to the database
+
+The system uses file-based routing (similar to NextJS) - simply create a folder in '/api' which is mapped to an api route with the folder name.
+
+To create a new api route (E.g api/users)
+
+#### 1. Create a **new folder** within the api folder the api path name you want:
 
 ```
 mkdir src/api/users
 ```
 
-### 2. Create an **api.ts** file in this new folder and add handler logic here - see https://github.com/mswjs/msw for information on writing handlers.
+#### 2. Create an **api.ts** file in this new folder and add handler logic here - see https://github.com/mswjs/msw for information on writing handlers.
 
-Also take a look at the example handlers in the api folder.
+Also take a look at the various example handlers in the api folder.
 
 The mock api framework uses the msw-data utility - see https://github.com/mswjs/data and a full rest or graphql api can be automatically set-up from this without having to define each handler using the format below
 
@@ -92,7 +109,7 @@ The mock api framework uses the msw-data utility - see https://github.com/mswjs/
 ...db.user.toHandlers('rest')
 ```
 
-### 3. Create a database
+#### 3. Create a database (if required)
 
 Database models are held in **/models** directory.
 
@@ -100,11 +117,13 @@ a. Create new models in this directory as required - see the users.ts and posts.
 
 b. Import the new model into the db.ts file and add to the factory function - https://github.com/mswjs/data for more details
 
-### 4. Seeding the database
+#### 4. Seeding the database
 
-#### a. manually adding data
+#### a. manually add data via POST/PUT Requests
 
 Data can be manually added / amended via POST/PUT requests to the relevant REST endpoint. This data wont persist and will be lost when the server is restarted.
+
+OR
 
 #### b. seed database with fake data.
 
@@ -115,6 +134,8 @@ Database seeders are located in the seeders folder.
 **Note**: New seeders should be created here and added to the index.ts file in the same folder in order to be automatically imported and executed on server start.
 This data will be different each time the server is started and the seeders re-run.
 
+OR
+
 #### c. populate the database with existing data
 
 You can create a data.json file in the /data folder and import this to seed the database with data that will persist and be the same each time the server is started.
@@ -123,7 +144,7 @@ See the seeders/post-seeder.ts and models/post.ts example
 
 ### 5. Making Http Requests
 
-Given the "user" model definition above, the following request handlers are generated and connected to the respective database operations:
+Given the "user" model definition above, the following request handlers are auto-generated and connected to the respective database operations:
 
     GET /users/:id (where "id" is your model's primary key), returns a user by ID;
     GET /users, returns all users (supports pagination);
@@ -133,9 +154,11 @@ Given the "user" model definition above, the following request handlers are gene
 
 The "/user" part of the route is derived from your model name. For example, if you had a "post" model defined in your factory, then the generated handlers would be /posts, /posts/:id, etc.
 
+If handlers are manually created (E.g as in the Bikes folder) - then only the explicitly defined endpoints will be available.
+
 ### 6. Middleware
 
-For **custom handlers** can contain 'middleware' code defined in an individual handler for each route and http header verb.
+**Custom handlers** can contain 'middleware' code defined in an individual handler for each route and http header verb.
 
 See the cat api for examples of custom handlers getting information from the database and bikes and trains apis for examples of simple 'middleware' added to a custom route.
 
@@ -146,6 +169,14 @@ url.searchParams.get('type')
 ```
 
 where type is a url parameter (/api/bikes/?type=KawasakiNinja). This can then be used in the middleware code as required.
+
+Dynamic url pathnames (e.g localhost/api/images/:imageId) can be extracted using
+
+```
+const params = url.pathname.split('/').pop();
+```
+
+where params will be the value of :imageId
 
 ### 7. Available endpoints
 
@@ -161,25 +192,33 @@ Lambda functions can be developed in the mock framework and then used in AWS CDK
 
 Lambda functions are stored in the src/lambdas directory.
 
-When a lambda is called from an api, the MSW/ExpressJS request object needs to be converted into an AWS API Gateway Proxy Event object using the requestToApiGatewayProxyEvent function in utilities. This mocks how a real API Gateway sends URL queries and body data to a Lambda so lambda code developed in should work in an API Rest Gateway.
+When a lambda is called from an api, the MSW/ExpressJS request object needs to be converted into an AWS API Gateway Proxy Event object using the requestToApiGatewayProxyEvent function in utilities. This mocks how a real API Gateway sends URL queries and body data to a Lambda so lambda code developed in should work in an API Rest Gateway setup.
 
-### 9. Images
+Lambda functions created using NodeJSFunction() in the AWS CDK will be built and bundled using esbuild by the AWS CDK. Functions developed in this framework should work but it is a good idea to check this using LocalStack or test AWS sandbox.
 
-Images should be stored in the src/images folder.  
+### 9. Images and Videos
+
+Images and Videos should be stored in the src/images folder.  
 They can be accessed using the format http://localhost:8000/api/images/{image_filename}.  
 E.g
 
-    ```
+```
     http://localhost:8000/api/images/placeholder.png
-    ```
+```
+
+and
+
+```
+    http://localhost:8000/api/videos/placeholder.mp4
+```
 
 ### 10. Templates
 
-The templates directory contains useful templates for different type of handlers, models and seeders
+The templates directory contains some templates for different type of handlers, models and seeders
 
 ## Customisation
 
-### Change api url prefix
+### Changing api url prefix
 
 By default the api paths with be prefixed with "api/" this can be modified with the
 USE_API_URL_PREFIX environment variable in the .env file.
