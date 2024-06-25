@@ -198,7 +198,7 @@ Lambda functions created using NodeJSFunction() in the AWS CDK will be built and
 
 ### 9. Images and Videos
 
-Images and Videos should be stored in the src/images folder.  
+Images and Videos should be stored in the src/media/{images or videos} folder.  
 They can be accessed using the format http://localhost:8000/api/images/{image_filename}.  
 E.g
 
