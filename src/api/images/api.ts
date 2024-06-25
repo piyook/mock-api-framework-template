@@ -13,7 +13,7 @@ function handler(pathName: string) {
             console.log(`starting ${pathName}`);
 
             const buffer = fs.readFileSync(
-                path.resolve(`./src/images/${params}`),
+                path.resolve(`./src/media/images/${params}`),
             );
 
             return HttpResponse.arrayBuffer(buffer, {

@@ -8,10 +8,10 @@ const prefix = process.env?.USE_API_URL_PREFIX
 const homePage = (apiPaths: string[]) => {
     const htmlString = `
         <html>
-        <body style="margin: 0px; background-color: #00200B; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height:100vh; font-family: sans-serif;">
+        <body style="margin: 0px; background-color: #383838; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height:100vh; font-family: sans-serif;">
 
             <div style="text-align: center; width: 80%;padding:50px; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; color:white">
-                <h1 style="padding-bottom: 10px;"> Mock LLM Server: <span class="highlight">Running</span></h1>
+                <h1 style="padding-bottom: 10px;"> Mock Server: <span class="highlight">Running</span></h1>
                 <div class="spacer"></div>
 
          <div style="text-align:left;width:clamp(650px, 800px, 90%)); ">
@@ -26,7 +26,8 @@ const homePage = (apiPaths: string[]) => {
 
         </div>
 
-        <p style="text-align: left; color:grey; padding-top:50px"><small>* add new api endpoints to the api folder</small></p>
+        <p class="starred"><small>* Add new api endpoints to the api folder. <br/>For media endpoints include the media name to the url E.g /images/placeholder.png </small></p>
+
    
         </div>
       
@@ -34,26 +35,25 @@ const homePage = (apiPaths: string[]) => {
              <style> 
             
             .highlight { 
-                background-color:#28831C;
+                background-color:#487b4d;
                 padding:5px 10px 5px 10px;
                 border-radius: 5px;
                 font-weight: bold;
                 color: white;
                 margin-left: 15px;
-                border: 3px white solid;
+                border: 2px white solid;
             }
 
             .endpoint {
-            text-align: right;
+            text-align: left;
             margin: 20px 0px 20px 0px;
             opacity:0.8;
             transition: all 0.5s ease-in-out;
             }
 
             .endpoint:hover {
-                translate: 20px 0px;
+                translate: 40px 0px;
                 opacity: 1;
-                transform: scale(1.1);
             }
 
             .info {
@@ -68,6 +68,13 @@ const homePage = (apiPaths: string[]) => {
                 width:100%;
                 border-bottom: 1px grey solid;
                 margin: 40px 0px 20px 0px;
+            }
+
+            .starred {
+            text-align: center;
+            line-height: 1.5; 
+            color:grey; 
+            padding-top:50px
             }
             </style>
         </html>
