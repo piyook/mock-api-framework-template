@@ -18,6 +18,7 @@ function handler(pathName: string) {
                 {
                     headers: {
                         'Content-Type': 'text/html',
+                        'Access-Control-Allow-Origin': '*',
                     },
                 },
             );
