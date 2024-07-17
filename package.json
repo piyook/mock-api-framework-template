@@ -11,7 +11,10 @@
         "lint": "xo 'src/**/*.{js,jsx,ts,tsx}'",
         "lint-fix": "xo 'src/**/*.{js,jsx,ts,tsx}' --fix",
         "pretty": "prettier 'src/**/*.{js,jsx,ts,tsx,css,scss,md}' --check",
-        "pretty-fix": "prettier 'src/**/*.{js,jsx,ts,tsx,css,scss,md}' --write"
+        "pretty-fix": "prettier 'src/**/*.{js,jsx,ts,tsx,css,scss,md}' --write",
+        "test:e2e": "start-server-and-test dev tcp:8000 cypress:run",
+        "cypress:open": "cypress open",
+        "cypress:run": "cypress run --e2e"
     },
     "dependencies": {
         "@faker-js/faker": "^8.4.1",
@@ -24,17 +27,20 @@
         "markdown-it": "^14.1.0",
         "msw": "^2.3.1",
         "tsx": "^4.16.2",
-        "typescript": "^5.5.3",
-        "xo": "^0.58.0"
+        "typescript": "^5.5.3"
     },
     "devDependencies": {
         "@commitlint/cli": "^19.3.0",
         "@commitlint/config-conventional": "^19.2.2",
         "@types/aws-lambda": "^8.10.141",
+        "@types/node": "^20.14.11",
+        "cypress": "^13.13.1",
         "husky": "^9.0.11",
         "lint-staged": "^15.2.7",
         "prettier": "3.3.3",
-        "validate-branch-name": "^1.3.0"
+        "start-server-and-test": "^2.0.4",
+        "validate-branch-name": "^1.3.0",
+        "xo": "^0.58.0"
     },
     "lint-staged": {
         "src/**/*.{js,jsx,ts,tsx}": "npm run lint",

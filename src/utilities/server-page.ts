@@ -15,14 +15,14 @@ const homePage = (apiPaths: string[]) => {
                 <div class="spacer"></div>
 
          <div style="text-align:left;width:clamp(650px, 800px, 90%)); ">
-                <h3 class="info">Server Address: <span class="highlight">localhost</span> </h3>
-                <h3 class="info">Server Port: <span class="highlight">${process.env?.SERVER_PORT?.toUpperCase() ?? 'NONE'}</span> </h3>
-                <h3 class="info">Server URL Prefix: <span class="highlight">${process.env?.USE_API_URL_PREFIX?.toLowerCase() ?? 'NONE'}</span> </h3>
+                <h3 class="info">Server Address: <span class="highlight" cy-data="server_address">localhost</span> </h3>
+                <h3 class="info">Server Port: <span class="highlight" cy-data="server_port">${process.env?.SERVER_PORT?.toUpperCase() ?? 'NONE'}</span> </h3>
+                <h3 class="info">Server URL Prefix: <span class="highlight" cy-data="url_prefix">${process.env?.USE_API_URL_PREFIX?.toLowerCase() ?? 'NONE'}</span> </h3>
         
         <h3  class="info">API endpoints*:</h3>
         <div>
      
-        ${apiPaths.map((path) => '<h3 class="endpoint"> <a class="highlight endpoint endpoint_link" href="' + prefix + path + '">/' + prefix + path + '</a></h3>').join('')}
+        ${apiPaths.map((path) => '<h3 class="endpoint"> <a class="highlight endpoint endpoint_link" cy-data="endpoint" href="' + prefix + path + '">/' + prefix + path + '</a></h3>').join('')}
 
         </div>
 
