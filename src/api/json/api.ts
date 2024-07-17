@@ -30,16 +30,29 @@ function handler(pathName: string) {
 
             console.log(`starting ${pathName}`);
 
-            const data = fs.readFileSync(
-                path.resolve(`./src/data/${params}.json`),
-            );
+            try {
+                const data = fs.readFileSync(
+                    path.resolve(`./src/resources/json/${params}.json`),
+                );
 
-            return HttpResponse.arrayBuffer(data, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                },
-            });
+                return HttpResponse.arrayBuffer(data, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                });
+            } catch {
+                return HttpResponse.text(
+                    'Error: File not found. Check JSON file is in the src/data folder',
+                    {
+                        status: 404,
+                        headers: {
+                            'Content-Type': 'text/html',
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                    },
+                );
+            }
         }),
     ];
 }

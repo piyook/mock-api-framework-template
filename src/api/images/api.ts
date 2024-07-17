@@ -29,16 +29,29 @@ function handler(pathName: string) {
 
             console.log(`starting ${pathName}`);
 
-            const buffer = fs.readFileSync(
-                path.resolve(`./src/media/images/${params}`),
-            );
+            try {
+                const buffer = fs.readFileSync(
+                    path.resolve(`./src/resources/images/${params}`),
+                );
 
-            return HttpResponse.arrayBuffer(buffer, {
-                headers: {
-                    'Content-Type': 'image/png',
-                    'Access-Control-Allow-Origin': '*',
-                },
-            });
+                return HttpResponse.arrayBuffer(buffer, {
+                    headers: {
+                        'Content-Type': 'image/png',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                });
+            } catch {
+                return HttpResponse.text(
+                    'Error: File not found. Check file is in the src/resources/images folder',
+                    {
+                        status: 404,
+                        headers: {
+                            'Content-Type': 'text/html',
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                    },
+                );
+            }
         }),
     ];
 }

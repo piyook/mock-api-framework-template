@@ -22,11 +22,11 @@ const homePage = (apiPaths: string[]) => {
         <h3  class="info">API endpoints*:</h3>
         <div>
      
-        ${apiPaths.map((path) => '<h3 class="endpoint"> <a class="highlight endpoint" href="' + prefix + path + '">/' + prefix + path + '</a></h3>').join('')}
+        ${apiPaths.map((path) => '<h3 class="endpoint"> <a class="highlight endpoint endpoint_link" href="' + prefix + path + '">/' + prefix + path + '</a></h3>').join('')}
 
         </div>
 
-        <p class="starred"><small>* Add new api endpoints to the api folder. <br/>For media endpoints include the media name to the url E.g /images/placeholder.png </small></p>
+        <p class="starred"><small>* Add new api endpoints to the api folder. <br/>For media endpoints include the media name in the url E.g /images/placeholder.png </small></p>
 
    
         </div>
@@ -35,24 +35,30 @@ const homePage = (apiPaths: string[]) => {
              <style> 
             
             .highlight { 
-                background-color:#487b4d;
-                padding:5px 10px 5px 10px;
+                background-color:#086e3d;
+                padding:10px 15px 10px 15px;
                 border-radius: 5px;
                 font-weight: bold;
                 color: white;
                 margin-left: 15px;
-                border: 2px white solid;
+                opacity:0.8;
+            }
+
+            .endpoint_link {
+            background-color: #51639a;
+              border: 1px solid grey;
+        
             }
 
             .endpoint {
             text-align: left;
-            margin: 20px 0px 20px 0px;
-            opacity:0.8;
+            margin: 30px 0px 30px 0px;
+            opacity:0.7;
             transition: all 0.5s ease-in-out;
             }
 
             .endpoint:hover {
-                translate: 40px 0px;
+                cursor: pointer;
                 opacity: 1;
             }
 

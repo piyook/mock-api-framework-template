@@ -7,6 +7,6 @@ export const cat = {
     // ...with these properties and value getters.
     id: primaryKey(Number),
     type: () => faker.animal.cat(),
-    description: () => faker.lorem.lines(5),
-    price: () => faker.commerce.price({ min: 50, max: 400 }),
+    name: () => faker.person.firstName(),
+    starSign: () => faker.person.zodiacSign(),
 };

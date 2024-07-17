@@ -29,15 +29,29 @@ function handler(pathName: string) {
 
             console.log(`starting ${pathName}`);
 
-            const buffer = fs.readFileSync(
-                path.resolve(`./src/media/videos/${params}`),
-            );
+            try {
+                const buffer = fs.readFileSync(
+                    path.resolve(`./src/resources/videos/${params}`),
+                );
 
-            return HttpResponse.arrayBuffer(buffer, {
-                headers: {
-                    'Content-Type': 'video/mp4',
-                },
-            });
+                return HttpResponse.arrayBuffer(buffer, {
+                    headers: {
+                        'Content-Type': 'video/mp4',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                });
+            } catch {
+                return HttpResponse.text(
+                    'Error: File not found. Check file is in the src/resources/videos folder',
+                    {
+                        status: 404,
+                        headers: {
+                            'Content-Type': 'text/html',
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                    },
+                );
+            }
         }),
     ];
 }
