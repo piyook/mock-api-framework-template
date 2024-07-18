@@ -105,6 +105,12 @@ For example to create a new api route (E.g api/users)
 mkdir src/api/users
 ```
 
+#### IMPORTANT
+
+Rember to use 'npm run dev' to start a local dev server when developing new API endpoints.  
+
+Once endpoints have been developed and tested then use 'npm run start' to build the docker image and start a container to serve the endpoints on localhost (or use 'npm run rebuild' or 'npm run nuke' if changes need to be made to an existing docker image).
+
 #### 2. Create an **api.ts** file in this new folder and add handler logic here - see https://github.com/mswjs/msw for information on writing handlers.
 
 Also take a look at the various example handlers in the api folder.
