@@ -10,7 +10,7 @@ function handler(pathName: string) {
             return HttpResponse.text(
                 `<body style="background-color: #383838; color:white">
                 <div style="text-align:center; padding:50px 0px 0px 0px">
-                <h4>Access images stored in the src/media/images folder using the format: <span style="color:red">api/images/{filename}</span></h4>
+                <h4>Access images stored in the src/resources/images folder using the format: <span style="color:red">api/images/{filename}</span></h4>
                 <h4>Example: api/images/placeholder.png</h4>
                 </div>
                 </body>
