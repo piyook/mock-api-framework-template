@@ -209,7 +209,7 @@ Lambda functions created using NodeJSFunction() in the AWS CDK will be built and
 
 ### 9. Images and Videos
 
-Images and Videos should be stored in the src/media/{images or videos} folder.  
+Images and Videos should be stored in the src/resources/{images or videos} folder.  
 They can be accessed using the format http://localhost:8000/api/images/{image_filename.ext}.  
 E.g
 
@@ -223,15 +223,23 @@ and
     http://localhost:8000/api/videos/placeholder.mp4
 ```
 
-### 10. JSON files
+### 10. Markdown
 
-JSON files are stored in the src/data folder. See the api/json example which can be accessed from 'api/json/{filename}' (i.e without the .json extension).
+Markdown can be served from the markdown folder in src/resources/markdown and supports code highlighting. Note the url doesn't need to include .md
+
+```
+http://localhost:8000/api/markdown/demo
+```
+
+### 11. JSON files
+
+JSON files are stored in the src/resources/json folder. See the api/json example which can be accessed from 'api/json/{filename}' (i.e without the .json extension).
 
 ```
 http://localhost:8000/api/json/demo
 ```
 
-### 11. Templates
+### 12. Templates
 
 The templates directory contains some templates for different type of handlers, models and seeders
 

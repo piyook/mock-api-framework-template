@@ -10,7 +10,7 @@ function handler(pathName: string) {
             console.log(`starting ${pathName}`);
             console.log('Item Type is', type);
             return HttpResponse.json({
-                response: `this is a GET test response from ${pathName}`,
+                response: `this is a GET test response from ${pathName} for bike type: ${type ?? 'none'}`,
             });
         }),
         http.post(`/${pathName}`, async ({ request }) => {

@@ -42,14 +42,17 @@ jobs:
             - run: npm ci
             - run: npm audit
 
-    # test:
-    #     needs: [lint, prettier, audit]
-    #     runs-on: ubuntu-latest
-    #     steps:
-    #         - uses: actions/checkout@v4
-    #         - uses: actions/setup-node@v4
-    #           with:
-    #               node-version: '20'
-    #               cache: 'npm'
-    #         - run: npm ci
-    #         - run: npm run test
+    e2e-tests:
+        needs: [lint, prettier, audit]
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+            - name: Cypress run
+              uses: cypress-io/github-action@v6
+              with:
+                  start: |
+                      npm run dev
+                  #   wait-on: 'http://localhost:8000'
+                  #   wait-on-timeout: 60
+                  #   browser: chrome

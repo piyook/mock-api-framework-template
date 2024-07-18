@@ -10,7 +10,7 @@ function handler(pathName: string) {
             return HttpResponse.text(
                 `<body style="background-color: #383838; color:white">
                 <div style="text-align:center; padding:50px 0px 0px 0px">
-                <h4>Access videos stored in the src/media/videos folder using the format: <span style="color:red">api/videos/{filename}</span></h4>
+                <h4>Access videos stored in the src/resources/videos folder using the format: <span style="color:red">api/videos/{filename}</span></h4>
                 <h4>Example: api/videos/placeholder.mp4</h4>
                 </div>
                 </body>
@@ -29,15 +29,29 @@ function handler(pathName: string) {
 
             console.log(`starting ${pathName}`);
 
-            const buffer = fs.readFileSync(
-                path.resolve(`./src/media/videos/${params}`),
-            );
+            try {
+                const buffer = fs.readFileSync(
+                    path.resolve(`./src/resources/videos/${params}`),
+                );
 
-            return HttpResponse.arrayBuffer(buffer, {
-                headers: {
-                    'Content-Type': 'video/mp4',
-                },
-            });
+                return HttpResponse.arrayBuffer(buffer, {
+                    headers: {
+                        'Content-Type': 'video/mp4',
+                        'Access-Control-Allow-Origin': '*',
+                    },
+                });
+            } catch {
+                return HttpResponse.text(
+                    'Error: File not found. Check file is in the src/resources/videos folder',
+                    {
+                        status: 404,
+                        headers: {
+                            'Content-Type': 'text/html',
+                            'Access-Control-Allow-Origin': '*',
+                        },
+                    },
+                );
+            }
         }),
     ];
 }
