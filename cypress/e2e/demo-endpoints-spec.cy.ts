@@ -165,3 +165,18 @@ describe('Videos demo endpoint contains expected information', () => {
         });
     });
 });
+
+describe('Markdown demo endpoint contains expected information', () => {
+    it('checks markdown endpoint is running', () => {
+        cy.visit('/api/markdown');
+        cy.get('h4').contains(
+            'Access markdown files stored in the src/resources/markdown folder using the format:',
+        );
+        cy.get('h4').contains('Example: api/markdown/demo');
+    });
+    it('checks placeholder image demo endpoint is running', () => {
+        cy.visit('/api/markdown/demo');
+        cy.get('h1').contains('This is a test markdown file');
+        cy.get('h2').contains('Add files into the src/markdown directory');
+    });
+});

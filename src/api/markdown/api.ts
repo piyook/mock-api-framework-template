@@ -31,7 +31,7 @@ function handler(pathName: string) {
             return HttpResponse.text(
                 `<body style="background-color: #383838; color:white">
                 <div style="text-align:center; padding:50px 0px 0px 0px">
-                <h4>Access markdown files stored in the src/media/markdown folder using the format: <span style="color:red">api/markdown/{filename}</span></h4>
+                <h4>Access markdown files stored in the src/resources/markdown folder using the format: <span style="color:red">api/markdown/{filename}</span></h4>
                 <h4>Example: api/markdown/demo</h4>
                 </div>
                 </body>
