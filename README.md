@@ -1,3 +1,7 @@
+![GitHub Release](https://img.shields.io/github/v/release/piyook/mock-api-framework-template)
+![Github actions](https://github.com/piyook/mock-api-framework-template/actions/workflows/tests.yaml/badge.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 # Local Mock API Framework
 
 ## Purpose
@@ -107,7 +111,7 @@ mkdir src/api/users
 
 #### IMPORTANT
 
-Rember to use 'npm run dev' to start a local dev server when developing new API endpoints.  
+Rember to use 'npm run dev' to start a local dev server when developing new API endpoints.
 
 Once endpoints have been developed and tested then use 'npm run start' to build the docker image and start a container to serve the endpoints on localhost (or use 'npm run rebuild' or 'npm run nuke' if changes need to be made to an existing docker image).
 
