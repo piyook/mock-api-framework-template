@@ -6,7 +6,7 @@ import serverPage from './utilities/server-page.js';
 
 const { apiHandlers, apiPaths } = await getApiPaths();
 
-const httpServer = createServer(...apiHandlers, ...serverPage(apiPaths));
+const httpServer = createServer({}, ...apiHandlers, ...serverPage(apiPaths));
 
 httpServer.listen(process.env.SERVER_PORT);
 
