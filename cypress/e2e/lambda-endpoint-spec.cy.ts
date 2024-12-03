@@ -26,7 +26,21 @@ describe('Lambda demo endpoint works as expected', () => {
         });
     });
 
-    it('check test Lambda function error handling is working with no body data', () => {
+    it('check test Lambda function error handling is working with no userQuestion in request body data', () => {
+        cy.request({
+            method: 'POST',
+            url: '/api/lambda',
+            body: {},
+            failOnStatusCode: false,
+        }).then((response) => {
+            expect(response.status).to.eq(500);
+            expect(response.body).to.contain(
+                'Invalid Payload : must contain a userQuestion property',
+            );
+        });
+    });
+
+    it('check test Lambda function error handling is working with no body object in request', () => {
         cy.request({
             method: 'POST',
             url: '/api/lambda',
@@ -34,7 +48,7 @@ describe('Lambda demo endpoint works as expected', () => {
         }).then((response) => {
             expect(response.status).to.eq(500);
             expect(response.body).to.contain(
-                'Invalid Payload : must contain a userQuestion property',
+                'Invalid Payload : must contain a body property',
             );
         });
     });

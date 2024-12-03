@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { type HttpHandler } from 'msw';
+import { prefix } from './env';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -18,10 +19,6 @@ export default async function getApiPaths() {
     const apiPaths: string[] = [];
 
     const files = fs.readdirSync(apiFolder);
-
-    const prefix = process.env?.USE_API_URL_PREFIX
-        ? process.env.USE_API_URL_PREFIX + '/'
-        : '';
 
     for (const file of files) {
         const filePath = path.join(apiFolder, file);

@@ -14,7 +14,14 @@ const requestToApiGatewayProxyEvent = async (
     // On aws its JSON.parse (event.body) to get the body as an object
 
     const extractBodyPayload = async () => {
-        return JSON.stringify(await request.json());
+        let payload: DefaultBodyType;
+        try {
+            payload = await request.json();
+        } catch {
+            throw new Error('Invalid Payload : must contain a body property');
+        }
+
+        return JSON.stringify(payload);
     };
 
     const extractQueryStringParameters = async () => {

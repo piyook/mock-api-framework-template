@@ -1,12 +1,11 @@
 // // Copy and save as api.ts in the api path folder in your project using the correct path to models dir
 import { db } from '../../src/models/db.js';
+import { env } from '../../src/utilities/env.js';
 
 // Example of msw data auto REST handler generation
 function handler(pathName: string) {
     // Need to add a prefix here for automatic REST handler generation to a specific path
-    const prefix = process.env?.USE_API_URL_PREFIX
-        ? '/' + process.env.USE_API_URL_PREFIX
-        : '';
+    const prefix = env?.USE_API_URL_PREFIX ? '/' + env.USE_API_URL_PREFIX : '';
 
     // This will generate all REST handlers for the /api/posts path - GET, POST, PUT and DELETE
     return [...db.post.toHandlers('rest', prefix)];

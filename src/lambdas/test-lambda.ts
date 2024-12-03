@@ -12,7 +12,7 @@ export const handler = async (
 ): Promise<APIGatewayProxyResult> => {
     // On aws its JSON.parse (event.body) to get the body as an object
 
-    if (!event.body) {
+    if (!event?.body) {
         throw new Error('Invalid Payload : must contain a body property');
     }
 

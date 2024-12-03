@@ -18,7 +18,6 @@ function handler(pathName: string) {
         // Make POST requests to this route with the JSON body data with {"userQuestion": "some test text"} to test
         http.post(`/${pathName}`, async ({ request }) => {
             const event = await requestToApiGatewayProxyEvent(request);
-
             return HttpResponse.json(await demoHandler(event));
         }),
     ];
