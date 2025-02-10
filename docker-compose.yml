@@ -6,6 +6,7 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: development
+      PROJECT_NAME: ${PROJECT_NAME}
       HUSKY: 0
       SERVER_PORT: ${SERVER_PORT}
       USE_API_URL_PREFIX: ${USE_API_URL_PREFIX}

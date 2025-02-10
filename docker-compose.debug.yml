@@ -6,6 +6,7 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: development
+      PROJECT_NAME: ${PROJECT_NAME}
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
       - 9229:9229
