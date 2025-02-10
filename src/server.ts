@@ -7,7 +7,7 @@ import { env } from './utilities/env.js';
 
 const { apiHandlers, apiPaths } = await getApiPaths();
 
-const httpServer = createServer({}, ...apiHandlers, ...serverPage(apiPaths));
+const httpServer = createServer(...apiHandlers, ...serverPage(apiPaths));
 
 httpServer.listen(env.SERVER_PORT);
 
