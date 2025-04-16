@@ -86,14 +86,14 @@ npm run dev
 
 The framework is written in TypeScript and can :
 
--   Serve data from static files (JSON or text)
--   Serve media : Images and Videos
--   Serve markdown files
--   Be used to write and test AWS Lambda Functions
--   Use custom middleware to transform input/output
--   Serve random Database seed data
--   Serve persisted mock data to the database
--   Perform CRUD operations on the local database via a REST endpoint
+- Serve data from static files (JSON or text)
+- Serve media : Images and Videos
+- Serve markdown files
+- Be used to write and test AWS Lambda Functions
+- Use custom middleware to transform input/output
+- Serve random Database seed data
+- Serve persisted mock data to the database
+- Perform CRUD operations on the local database via a REST endpoint
 
 ### Setting up a new API route
 
@@ -111,7 +111,7 @@ mkdir src/api/users
 
 #### IMPORTANT
 
-Rember to use 'npm run dev' to start a local dev server when developing new API endpoints.
+Remember to use 'npm run dev' to start a local dev server when developing new API endpoints.
 
 Once endpoints have been developed and tested then use 'npm run start' to build the docker image and start a container to serve the endpoints on localhost (or use 'npm run rebuild' or 'npm run nuke' if changes need to be made to an existing docker image).
 
@@ -270,6 +270,31 @@ http://localhost:8000/api/json/demo
 ### 12. Templates
 
 The templates directory contains some templates for different type of handlers, models and seeders but the demo api endpoints can just as easily be copied and modified for individual use cases.
+
+### 13. Error Route
+
+It can be useful to mock api errors in order to test frontend error handling logic.
+
+To do this redirect frontend fetch requests to the api/error route.
+
+```
+http://localhost:8000/api/error
+```
+
+The default error for this route is a '404: not found' error but if specific errors are required, then this can be customised by passing 'status' to the endpoint and also a custom 'message' if required.
+
+E.g to mimic a 500 'Internal Server Error'
+
+```
+http://localhost:8000/api/error?status=500&message=Internal%20Server%20Error
+```
+
+this will return a 500 error code and the JSON response below:
+
+```
+{"error":"500: Internal Server Error"}
+
+```
 
 ## Customisation
 
