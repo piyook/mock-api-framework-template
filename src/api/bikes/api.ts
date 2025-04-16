@@ -3,7 +3,6 @@ import { http, HttpResponse } from 'msw';
 // Add any http handler here (get, push , delete etc., and middleware as needed)
 
 function handler(pathName: string) {
-    console.log('bikes path');
     return [
         http.get(`/${pathName}`, ({ request }) => {
             const url = new URL(request.url);
