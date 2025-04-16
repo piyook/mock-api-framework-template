@@ -94,6 +94,7 @@ The framework is written in TypeScript and can :
 - Serve random Database seed data
 - Serve persisted mock data to the database
 - Perform CRUD operations on the local database via a REST endpoint
+- Mock API error codes/messages for testing frontend error handling logic
 
 ### Setting up a new API route
 
