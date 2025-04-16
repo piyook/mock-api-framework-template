@@ -10,6 +10,7 @@ describe('Server page contains expected information', () => {
             '/api/posts',
             '/api/users',
             '/api/videos',
+            '/api/error',
         ];
         cy.visit('/');
         cy.get('h1').contains('Running');
