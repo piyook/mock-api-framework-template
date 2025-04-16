@@ -32,15 +32,12 @@ export default async function getApiRoutes() {
             apiRoutes.push(directory);
 
             // Import the api.ts file (assuming it's in each directory) - this returns a promise
-            try {
-                const importPromise = import(
-                    `file://${path.join(filePath, 'api.ts')}`
-                ) as ApiFile;
-                // Add new import promises to array of promises to be used by promise.all below
-                apiFileImportPromises.push(importPromise);
-            } catch (error) {
-                console.error('Error importing api.ts file:', error);
-            }
+
+            const importPromise = import(
+                `file://${path.join(filePath, 'api.ts')}`
+            ) as ApiFile;
+            // Add new import promises to array of promises to be used by promise.all below
+            apiFileImportPromises.push(importPromise);
         }
     }
 
@@ -57,7 +54,26 @@ export default async function getApiRoutes() {
             }
         })
         .then(() => {
-            // When all are resolved then return the handlers and paths
+            // When all are resolved then return the handlers and api route names
             return { apiHandlers, apiRoutes };
+        })
+        .catch((error: unknown) => {
+            // If any of the promises fail then throw an error
+            // This will be the case if the api.ts file is not found in the directory
+            // or if the file is not in a valid format
+            if (error instanceof Error) {
+                // eslint-disable-next-line unicorn/prefer-type-error -- This is not a type error
+                throw new Error(
+                    `
+                ********************************************************************************************************************************
+                CANNOT LOAD AN API ROUTE FROM SRC/API - CHECK AN API.TS FILE EXISTS IN EACH DIRECTORY THAT RETURNS A HANDLER ARRAY (SEE README):
+                *********************************************************************************************************************************\n
+                \nDetails:\n\n${error.message}`,
+                );
+            }
+
+            throw new Error(
+                'An unknown error occurred while loading the API routes',
+            );
         });
 }
