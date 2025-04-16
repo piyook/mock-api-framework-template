@@ -12,6 +12,18 @@ This can be used for serving a variety of different content, such as JSON data, 
 
 The project is built using MSW and can be run directly on a local machine or in Docker containers.
 
+The framework is written in TypeScript and can :
+
+- Serve data from static files (JSON or text)
+- Serve media : Images and Videos
+- Serve markdown files
+- Be used to write and test AWS Lambda Functions
+- Use custom middleware to transform input/output
+- Serve random Database seed data
+- Serve persisted mock data to the database
+- Perform CRUD operations on the local database via a REST endpoint
+- Mock API error codes/messages for testing frontend error handling logic
+
 ## Set-up
 
 Clone the repo or use the template button directly in GitHub to set-up a new repo using this one as a template.
@@ -83,18 +95,6 @@ npm run dev
 ```
 
 ## Using the Mock API Framework
-
-The framework is written in TypeScript and can :
-
-- Serve data from static files (JSON or text)
-- Serve media : Images and Videos
-- Serve markdown files
-- Be used to write and test AWS Lambda Functions
-- Use custom middleware to transform input/output
-- Serve random Database seed data
-- Serve persisted mock data to the database
-- Perform CRUD operations on the local database via a REST endpoint
-- Mock API error codes/messages for testing frontend error handling logic
 
 ### Setting up a new API route
 
