@@ -11,49 +11,53 @@ type ApiFile = Promise<{
     default: (pathName: string) => HttpHandler[];
 }>;
 
-export default async function getApiPaths() {
-    const apiFolder = `${__dirname}/../api`;
+export default async function getApiRoutes() {
+    const apiRootDirectoryPath = `${__dirname}/../api`;
 
-    const apiHandlersPromises: ApiFile[] = [];
+    const apiFileImportPromises: ApiFile[] = [];
     const apiHandlers: HttpHandler[] = [];
-    const apiPaths: string[] = [];
+    const apiRoutes: string[] = [];
 
-    const files = fs.readdirSync(apiFolder);
+    const apiDirectories = fs.readdirSync(apiRootDirectoryPath);
 
-    for (const file of files) {
-        const filePath = path.join(apiFolder, file);
+    for (const directory of apiDirectories) {
+        const filePath = path.join(apiRootDirectoryPath, directory);
         const stats = fs.statSync(filePath);
 
         if (stats.isDirectory()) {
-            // Get the directory name
-            console.log(`Api Path: ${prefix}${file}`);
-            apiPaths.push(file);
+            console.log(
+                `Found folder in src/api: Adding New Route ${prefix}${directory}`,
+            );
+            // Add directory/route name to list of api paths
+            apiRoutes.push(directory);
 
-            // Import index.ts file (assuming it's in each directory) - this returns a promise
+            // Import the api.ts file (assuming it's in each directory) - this returns a promise
             try {
                 const importPromise = import(
                     `file://${path.join(filePath, 'api.ts')}`
                 ) as ApiFile;
-                // Add new import promises to array of promises to be used by promise.all
-                apiHandlersPromises.push(importPromise);
+                // Add new import promises to array of promises to be used by promise.all below
+                apiFileImportPromises.push(importPromise);
             } catch (error) {
-                console.error('Error importing index.ts file:', error);
+                console.error('Error importing api.ts file:', error);
             }
         }
     }
 
-    // Return a promise.all to resolve all promises that will themselves return the api handlers function that can be called with the api paths
-    return Promise.all(apiHandlersPromises)
-        .then((handlers) => {
-            for (const [index, handler] of handlers.entries()) {
-                // Add new handlers with the desired apiPath to return array - remember to spread these out as may be more than one
+    /* Return a promise.all to resolve when all promises resolve that will each themselves return the file 
+    with a default import (api handlers function) that can be imported with the api path */
+    return Promise.all(apiFileImportPromises)
+        .then((files) => {
+            for (const [index, file] of files.entries()) {
+                /* Add new handlers with the desired apiPath to return array - remember to spread these out as may be 
+                more than one handler in return array */
                 apiHandlers.push(
-                    ...handler.default(`${prefix}${apiPaths[index]}`),
+                    ...file.default(`${prefix}${apiRoutes[index]}`),
                 );
             }
         })
         .then(() => {
             // When all are resolved then return the handlers and paths
-            return { apiHandlers, apiPaths };
+            return { apiHandlers, apiRoutes };
         });
 }

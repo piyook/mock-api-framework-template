@@ -2,7 +2,7 @@
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
 if ! [[ $BRANCH_NAME =~ ^(main|dev){1}$|^(feat|fix|hotfix|release|chore)/.+$ ]]; then
-  echo "Error: INVALID BRANCH NAME: use format 'feature|fix|hotfix|release|core/your-branch-name'"
+  echo "Error: INVALID BRANCH NAME: use format 'feature|fix|hotfix|release|chore/your-branch-name'"
   exit 1
 fi
 echo "Validated branch: $BRANCH_NAME - all OK :)"
