@@ -23,6 +23,7 @@ The framework is written in TypeScript and can :
 - Serve persisted mock data to the database
 - Perform CRUD operations on the local database via a REST endpoint
 - Mock API error codes/messages for testing frontend error handling logic
+- Log and store API requests in JSON format and display information on the localhost:8000/logs route
 
 ## Set-up
 
@@ -64,7 +65,7 @@ A list of all endpoints can be viewed on http://localhost:8000/.
 
 The project has been set-up with demo endpoints that can be removed or modified as needed.
 
-![alt text](image.png)
+![main server page](image.png)
 
 ### Useful Commands
 
@@ -296,6 +297,48 @@ this will return a 500 error code and the JSON response below:
 {"error":"500: Internal Server Error"}
 
 ```
+
+## Logging
+
+API request information and sent data can be logged and stored as JSON in the /src/logs/ folder.
+
+Logs can be viewed at **localhost:8000/logs**.
+
+![logging](logs.png)
+
+### Set-up
+
+To enable logging set the environment variables below in the .env
+
+```js
+LOG_REQUESTS = ON;
+DELETE_LOGS_ON_SERVER_RESTART = ON;
+```
+
+You can choose to refresh the logfile every time the server restarts or persist the data by setting the DELETE_LOGS_ON_SERVER_RESTART variable.
+
+To set up logging for a route, add the following to the api.ts file in the relevant handler, adjusting the request type (GET/POST/PUT/DELETE) and passing data to be logged as required:
+
+```js
+import logger from '../../utilities/logger';
+
+function handler(pathName: string) {
+    return [
+         http.get(`/${pathName}`, ({ request }) => {
+
+            ...
+                    logger({
+                            data: { <- extracted request body or query params data here -> },
+                            pathName,
+                            type: 'GET',
+                            });
+            ...
+         }),
+    ]
+}
+```
+
+**See the src/api/bikes api.ts file for an example of logging set up.**
 
 ## Customisation
 
