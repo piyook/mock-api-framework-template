@@ -23,6 +23,8 @@ const homePage = (apiPaths: string[]) => {
 
         </div>
 
+        <h3 class="info">Logs URL: <a class="highlight" href="/logs">localhost:${process.env?.SERVER_PORT}/logs</a> </h3>
+
         <p class="starred"><small>* Add new api endpoints to the api folder. <br/>For media endpoints include the media name in the url E.g /images/placeholder.png </small></p>
 
    
