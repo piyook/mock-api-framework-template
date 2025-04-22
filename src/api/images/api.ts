@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { http, HttpResponse } from 'msw';
+import sharp from 'sharp';
 
 // Add any http handler here (get, push , delete etc., and middleware as needed)
 
@@ -23,18 +24,32 @@ function handler(pathName: string) {
                 },
             );
         }),
-        http.get(`/${pathName}/:imageID`, ({ request }) => {
+        http.get(`/${pathName}/:imageID`, async ({ request }) => {
             const url = new URL(request.url);
+            const width = url.searchParams.get('width');
+            const height = url.searchParams.get('height');
+            console.log(`height ${height} and width ${width}`);
             const params = url.pathname.split('/').pop();
 
             console.log(`starting ${pathName}`);
 
             try {
-                const buffer = fs.readFileSync(
+                // Convert width and height to integers, if provided
+                const resizeOptions: sharp.ResizeOptions = {};
+                if (width && height)
+                    resizeOptions.width = Number.parseInt(width, 10);
+                if (height && width)
+                    resizeOptions.height = Number.parseInt(height, 10);
+
+                const inputBuffer = fs.readFileSync(
                     path.resolve(`./src/resources/images/${params}`),
                 );
+                const resizedImageBuffer = await sharp(inputBuffer)
+                    .resize(resizeOptions) // Only applies resize if width/height are present
+                    .png()
+                    .toBuffer();
 
-                return HttpResponse.arrayBuffer(buffer, {
+                return HttpResponse.arrayBuffer(resizedImageBuffer, {
                     headers: {
                         'Content-Type': 'image/png',
                         'Access-Control-Allow-Origin': '*',

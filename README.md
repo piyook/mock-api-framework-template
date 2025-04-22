@@ -15,7 +15,7 @@ The project is built using MSW and can be run directly on a local machine or in 
 The framework is written in TypeScript and can :
 
 - Serve data from static files (JSON or text)
-- Serve media : Images and Videos
+- Serve media : Images (which can be dynamically resized using url parameters) and Videos
 - Serve markdown files
 - Be used to write and test AWS Lambda Functions
 - Use custom middleware to transform input/output
@@ -251,6 +251,15 @@ and
 
 ```js
     http://localhost:8000/api/videos/placeholder.mp4
+```
+
+#### 9.1 Resizing images
+
+Images should be saved in PNG format. To get an image of any required size, pass the pixel width and height in the url parameters.
+Note: both a height AND a width need to be passed for the image to resize otherwise the default size is used.
+
+```
+http://localhost:8000/api/images/placeholder.png?width=300&height=500
 ```
 
 ### 10. Markdown
