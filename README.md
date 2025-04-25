@@ -27,8 +27,6 @@ The framework is written in TypeScript and can :
 
 ## Set-up
 
-Clone the repo or use the template button directly in GitHub to set-up a new repo using this one as a template.
-
 #### Requirements
 
 Node 20+ and Docker.
