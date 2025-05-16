@@ -149,6 +149,13 @@ describe('Images demo endpoint contains expected information', () => {
             expect(response.status).to.eq(200);
         });
     });
+    it('checks placeholder image can be resized', () => {
+        cy.request('/api/images/placeholder.png?height=200&width=300').then(
+            (response) => {
+                expect(response.status).to.eq(200);
+            },
+        );
+    });
 });
 
 describe('Videos demo endpoint contains expected information', () => {
