@@ -8,22 +8,22 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const createHtml = () => {
-    function readLogs() {
-        const logFolder = `${__dirname}/../logs`;
-        const logPath = path.join(logFolder, 'api_request_log.log');
-        let logs = '';
-        // Append the log entry to the log file
-        try {
-            logs = fs.readFileSync(logPath, 'utf8');
-        } catch {
-            logs =
-                '{"message": "No logs found", "solution": "Set LOG_REQUESTS env var to ON and add a logger function to a route api.ts. Restart the server then retry the request"}';
-        }
+	function readLogs() {
+		const logFolder = `${__dirname}/../logs`;
+		const logPath = path.join(logFolder, 'api_request_log.log');
+		let logs = '';
+		// Append the log entry to the log file
+		try {
+			logs = fs.readFileSync(logPath, 'utf8');
+		} catch {
+			logs =
+				'{"message": "No logs found", "solution": "Set LOG_REQUESTS env var to ON and add a logger function to a route api.ts. Restart the server then retry the request"}';
+		}
 
-        return `[${logs}]`;
-    }
+		return `[${logs}]`;
+	}
 
-    const htmlString = `
+	const htmlString = `
         <html>
         <header> 
         <title>API Request Log</title>
@@ -88,20 +88,20 @@ ol.json-lines >li::marker { font-family: system-ui, sans-serif; font-weight: nor
         </html>
     `;
 
-    return htmlString;
+	return htmlString;
 };
 
 const logPage = () => {
-    return [
-        http.get(`/logs`, () => {
-            return new HttpResponse(createHtml(), {
-                status: 200,
-                headers: {
-                    'Content-Type': 'text/html',
-                },
-            });
-        }),
-    ];
+	return [
+		http.get(`/logs`, () => {
+			return new HttpResponse(createHtml(), {
+				status: 200,
+				headers: {
+					'Content-Type': 'text/html',
+				},
+			});
+		}),
+	];
 };
 
 export default logPage;

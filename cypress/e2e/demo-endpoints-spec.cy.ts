@@ -1,6 +1,3 @@
-import exp from 'constants';
-import { response } from 'express';
-
 const catsSchema = {
     $schema: 'http://json-schema.org/draft-04/schema#',
     type: 'array',

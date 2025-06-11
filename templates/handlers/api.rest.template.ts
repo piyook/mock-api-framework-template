@@ -4,6 +4,7 @@ import { env } from '../../src/utilities/env.js';
 
 // Example of msw data auto REST handler generation
 function handler(pathName: string) {
+    console.log(`Generating REST handlers for path: ${pathName}`);
     // Need to add a prefix here for automatic REST handler generation to a specific path
     const prefix = env?.USE_API_URL_PREFIX ? '/' + env.USE_API_URL_PREFIX : '';
 

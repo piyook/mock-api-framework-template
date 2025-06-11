@@ -14,7 +14,7 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands';
+// import './commands';
 
 import chaiJsonSchema from 'chai-json-schema';
 chai.use(chaiJsonSchema);

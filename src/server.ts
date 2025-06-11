@@ -10,14 +10,14 @@ import { env } from './utilities/env.js';
 const { apiHandlers, apiRoutes } = await getApiRoutes();
 
 const httpServer = createServer(
-    ...apiHandlers,
-    ...serverPage(apiRoutes),
-    ...logPage(),
+	...apiHandlers,
+	...serverPage(apiRoutes),
+	...logPage(),
 );
 
 // Delete any logs on server start if the DELETE_LOGS_ON_SERVER_RESTART env var is set to 'ON'
 if (process.env?.DELETE_LOGS_ON_SERVER_RESTART?.toUpperCase() === 'ON') {
-    deleteLogs();
+	deleteLogs();
 }
 
 // Set up the server to listen on the specified port
@@ -25,7 +25,7 @@ httpServer.listen(env.SERVER_PORT);
 
 // Execute dB seeder functions
 for (const seeder of Object.values(seeders)) {
-    seeder();
+	seeder();
 }
 
 console.log('\n*****************************************************');

@@ -10,12 +10,12 @@ const postData: Post[] = require('../data/data.json');
 
 // With this method we are seeding the database with persisted data from data/data.json rather than using faker data
 export const postSeeder = () => {
-    for (const post of postData) {
-        db.post.create({
-            id: post.id,
-            userId: post.userId,
-            title: post.title,
-            body: post.body,
-        });
-    }
+	for (const post of postData) {
+		db.post.create({
+			id: post.id,
+			userId: post.userId,
+			title: post.title,
+			body: post.body,
+		});
+	}
 };
