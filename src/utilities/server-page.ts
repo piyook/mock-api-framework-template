@@ -3,7 +3,7 @@ import { http, HttpResponse } from 'msw';
 import { env, prefix } from './env';
 
 const homePage = (apiPaths: string[]) => {
-    const htmlString = `
+	const htmlString = `
         <html>
         <body style="margin: 0px; background-color: #383838; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height:100vh; font-family: sans-serif;">
 
@@ -85,16 +85,16 @@ const homePage = (apiPaths: string[]) => {
         </html>
     `;
 
-    return [
-        http.get(`/`, () => {
-            return new HttpResponse(htmlString, {
-                status: 200,
-                headers: {
-                    'Content-Type': 'text/html',
-                },
-            });
-        }),
-    ];
+	return [
+		http.get(`/`, () => {
+			return new HttpResponse(htmlString, {
+				status: 200,
+				headers: {
+					'Content-Type': 'text/html',
+				},
+			});
+		}),
+	];
 };
 
 export default homePage;

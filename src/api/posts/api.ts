@@ -3,8 +3,8 @@ import { prefix } from '../../utilities/env.js';
 
 // Example of msw data auto REST handler generation
 function handler() {
-    // Need to add a prefix here for automatic REST handler generation to a specific path
-    return [...db.post.toHandlers('rest', prefix)];
+	// Need to add a prefix here for automatic REST handler generation to a specific path
+	return [...db.post.toHandlers('rest', prefix)];
 }
 
 export default handler;

@@ -4,7 +4,7 @@ import { db } from '../models/db.js';
 if no input in create defaults to getter defined in model definition */
 
 export const userSeeder = () => {
-    for (let i = 0; i < 100; i++) {
-        db.user.create();
-    }
+	for (let i = 0; i < 100; i++) {
+		db.user.create();
+	}
 };
