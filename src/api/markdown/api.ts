@@ -27,7 +27,7 @@ function handler(pathName: string) {
         },
     }).disable(['link', 'image']);
     return [
-        http.get(`/${pathName}`, ({ request }) => {
+        http.get(`/${pathName}`, () => {
             return HttpResponse.text(
                 `<body style="background-color: #383838; color:white">
                 <div style="text-align:center; padding:50px 0px 0px 0px">

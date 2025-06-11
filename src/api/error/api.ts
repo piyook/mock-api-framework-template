@@ -1,5 +1,3 @@
-import fs from 'node:fs';
-import path from 'node:path';
 import { http, HttpResponse } from 'msw';
 
 function handler(pathName: string) {
