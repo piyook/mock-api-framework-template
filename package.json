@@ -8,8 +8,8 @@
         "restart": "npm stop && npm start",
         "nuke": "bash nuke.sh",
         "prepare": "husky || true",
-        "lint": "xo 'src/**/*.{js,jsx,ts,tsx}'",
-        "lint-fix": "xo 'src/**/*.{js,jsx,ts,tsx}' --fix",
+        "lint": "oxlint",
+        "lint-fix": "oxlint --fix",
         "pretty": "prettier 'src/**/*.{js,jsx,ts,tsx,css,scss,md}' --check",
         "pretty-fix": "prettier 'src/**/*.{js,jsx,ts,tsx,css,scss,md}' --write",
         "test:e2e": "start-server-and-test dev tcp:8000 cypress:run",
@@ -43,13 +43,13 @@
         "cypress": "^14.4.1",
         "husky": "^9.1.7",
         "lint-staged": "^16.1.0",
+        "oxlint": "^1.0.0",
         "prettier": "3.5.3",
-        "start-server-and-test": "^2.0.12",
-        "xo": "^0.60.0"
+        "start-server-and-test": "^2.0.12"
     },
     "lint-staged": {
-        "src/**/*.{js,jsx,ts,tsx}": "npm run lint",
-        "src/**/*.{js,jsx,ts,tsx,css,scss,md}": "npm run pretty"
+        "src/**/*.{js,jsx,ts,tsx}": "oxlint",
+        "src/**/*.{js,jsx,ts,tsx,css,scss,md}": "oxlint"
     },
     "commitlint": {
         "extends": [
