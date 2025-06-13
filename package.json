@@ -1,59 +1,62 @@
 {
-    "type": "module",
-    "scripts": {
-        "dev": "tsx watch ./src/server.ts",
-        "start": "docker compose up -d",
-        "stop": "docker compose down --volumes",
-        "rebuild": "docker compose down --volumes && docker compose up -d --force-recreate --build",
-        "restart": "npm stop && npm start",
-        "nuke": "bash nuke.sh",
-        "prepare": "husky || true",
-        "lint": "oxlint",
-        "lint-fix": "oxlint --fix",
-        "pretty": "prettier 'src/**/*.{js,jsx,ts,tsx,css,scss,md}' --check",
-        "pretty-fix": "prettier 'src/**/*.{js,jsx,ts,tsx,css,scss,md}' --write",
-        "test:e2e": "start-server-and-test dev tcp:8000 cypress:run",
-        "cypress:open": "cypress open",
-        "cypress:run": "cypress run --e2e",
-        "validate-branch-name": "bash validate-branch-name.sh"
-    },
-    "dependencies": {
-        "@faker-js/faker": "^9.8.0",
-        "@mswjs/data": "^0.16.2",
-        "@mswjs/http-middleware": "^0.10.3",
-        "@types/chai-json-schema": "^1.4.10",
-        "@types/express": "^5.0.3",
-        "@types/markdown-it": "^14.1.2",
-        "chai-json-schema": "^1.5.1",
-        "dotenv": "^16.5.0",
-        "highlight.js": "^11.11.1",
-        "markdown-it": "^14.1.0",
-        "msw": "^2.10.2",
-        "pretty-print-json": "^3.0.4",
-        "sharp": "^0.34.2",
-        "tsx": "^4.20.1",
-        "typescript": "^5.8.3",
-        "zod": "^3.25.61"
-    },
-    "devDependencies": {
-        "@commitlint/cli": "^19.8.1",
-        "@commitlint/config-conventional": "^19.8.1",
-        "@types/aws-lambda": "^8.10.149",
-        "@types/node": "^24.0.0",
-        "cypress": "^14.4.1",
-        "husky": "^9.1.7",
-        "lint-staged": "^16.1.0",
-        "oxlint": "^1.0.0",
-        "prettier": "3.5.3",
-        "start-server-and-test": "^2.0.12"
-    },
-    "lint-staged": {
-        "src/**/*.{js,jsx,ts,tsx}": "oxlint",
-        "src/**/*.{js,jsx,ts,tsx,css,scss,md}": "oxlint"
-    },
-    "commitlint": {
-        "extends": [
-            "@commitlint/config-conventional"
-        ]
-    }
+	"type": "module",
+	"scripts": {
+		"dev": "tsx watch ./src/server.ts",
+		"start": "docker compose up -d",
+		"stop": "docker compose down --volumes",
+		"rebuild": "docker compose down --volumes && docker compose up -d --force-recreate --build",
+		"restart": "npm stop && npm start",
+		"nuke": "bash nuke.sh",
+		"prepare": "husky || true",
+		"lint": "oxlint",
+		"lint-fix": "oxlint --fix",
+		"pretty": "prettier 'src/**/*.{js,jsx,ts,tsx,css,scss,md}' --check",
+		"pretty-fix": "prettier 'src/**/*.{js,jsx,ts,tsx,css,scss,md}' --write",
+		"test:e2e": "start-server-and-test dev tcp:8000 cypress:run",
+		"cypress:open": "cypress open",
+		"cypress:run": "cypress run --e2e",
+		"validate-branch-name": "bash validate-branch-name.sh",
+		"mcp:build": "tsc ./src/mcp/server.ts --target esnext --moduleResolution nodenext --module nodenext",
+		"mcp:debug": "npx @modelcontextprotocol/inspector node ./src/mcp/server.js"
+	},
+	"dependencies": {
+		"@faker-js/faker": "^9.8.0",
+		"@modelcontextprotocol/sdk": "^1.12.1",
+		"@mswjs/data": "^0.16.2",
+		"@mswjs/http-middleware": "^0.10.3",
+		"@types/chai-json-schema": "^1.4.10",
+		"@types/express": "^5.0.3",
+		"@types/markdown-it": "^14.1.2",
+		"chai-json-schema": "^1.5.1",
+		"dotenv": "^16.5.0",
+		"highlight.js": "^11.11.1",
+		"markdown-it": "^14.1.0",
+		"msw": "^2.10.2",
+		"pretty-print-json": "^3.0.4",
+		"sharp": "^0.34.2",
+		"tsx": "^4.20.1",
+		"typescript": "^5.8.3",
+		"zod": "^3.25.61"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^19.8.1",
+		"@commitlint/config-conventional": "^19.8.1",
+		"@types/aws-lambda": "^8.10.149",
+		"@types/node": "^24.0.0",
+		"cypress": "^14.4.1",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.1.0",
+		"oxlint": "^1.0.0",
+		"prettier": "3.5.3",
+		"start-server-and-test": "^2.0.12"
+	},
+	"lint-staged": {
+		"src/**/*.{js,jsx,ts,tsx}": "oxlint",
+		"src/**/*.{js,jsx,ts,tsx,css,scss,md}": "oxlint"
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		]
+	}
 }
