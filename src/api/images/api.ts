@@ -49,7 +49,7 @@ function handler(pathName: string) {
 					.png()
 					.toBuffer();
 
-				return HttpResponse.arrayBuffer(resizedImageBuffer, {
+				return new HttpResponse(resizedImageBuffer, {
 					headers: {
 						'Content-Type': 'image/png',
 						'Access-Control-Allow-Origin': '*',

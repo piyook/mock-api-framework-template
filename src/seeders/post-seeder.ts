@@ -1,6 +1,3 @@
-/* eslint-disable import/order  */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import { createRequire } from 'node:module';
 import { db } from '../models/db.js';
 import { type Post } from '../types.js';

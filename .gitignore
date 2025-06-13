@@ -1,4 +1,4 @@
 node_modules
 *.log
-screenshots/
-videos/
+cypress/screenshots/
+cypress/videos/

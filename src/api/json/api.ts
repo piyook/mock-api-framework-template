@@ -33,9 +33,10 @@ function handler(pathName: string) {
 			try {
 				const data = fs.readFileSync(
 					path.resolve(`./src/resources/json/${params}.json`),
+					'utf-8',
 				);
 
-				return HttpResponse.arrayBuffer(data, {
+				return HttpResponse.text(data, {
 					headers: {
 						'Content-Type': 'application/json',
 						'Access-Control-Allow-Origin': '*',
