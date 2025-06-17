@@ -28,7 +28,7 @@ const createHtml = () => {
         <header> 
         <title>API Request Log</title>
         </header>
-            <body style="margin: 0px; background-color: #00200B; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height:100vh; font-family: sans-serif;">
+            <body style="margin: 0px; background: linear-gradient(120deg, #20232a 0%, #23272F 70%, #0d1117 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height:100vh; font-family: sans-serif;">
             <h2 style="color:white" data-cy="logger-title">API Requests Made</h2>
             <h3 style="color:white">File can be viewed in /src/logs folder in container or local machine</h3>
             <h5 style="color:grey; margin-top:-10px;">LOG_REQUESTS env var must be set to 'ON' to log requests</h5>
@@ -69,7 +69,7 @@ ol.json-lines >li::marker { font-family: system-ui, sans-serif; font-weight: nor
 
 
 /* Dark Mode */
- .json-container                   { background-color: #00200B; }
+ .json-container                   { background-color: #20232a; }
  .json-key                         { color: indianred; }
  .json-string                      { color: khaki}
  .json-number                      { color: deepskyblue; }
@@ -81,8 +81,8 @@ ol.json-lines >li::marker { font-family: system-ui, sans-serif; font-weight: nor
  a.json-link:hover                 { color: violet; }
  a.json-link:active                { color: slategray; }
  ol.json-lines >li::marker         { color: silver; }
- ol.json-lines >li:nth-child(odd)  { background-color: #293829; }
- ol.json-lines >li:nth-child(even) { background-color: #354135; }
+ ol.json-lines >li:nth-child(odd)  { background-color:rgb(67, 67, 67); }
+ ol.json-lines >li:nth-child(even) { background-color:rgb(40, 40, 40); }
  ol.json-lines >li:hover           { background-color: dimgray; }
             </style>
         </html>
