@@ -31,7 +31,7 @@ const createHtml = () => {
             <body style="margin: 0px; background: linear-gradient(120deg, #20232a 0%, #23272F 70%, #0d1117 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; min-height:100vh; font-family: sans-serif;">
             <h2 style="color:white" data-cy="logger-title">API Requests Made</h2>
             <h3 style="color:white">File can be viewed in /src/logs folder in container or local machine</h3>
-            <h5 style="color:grey; margin-top:-10px;">LOG_REQUESTS env var must be set to 'ON' to log requests</h5>
+            <h5 style="text-align: center; color:grey; margin-top:-10px;">LOG_REQUESTS env var must be set to 'ON' to log requests <br/>AND the logger function must be implemented in the api.ts file for that endpoint</h5>
 <div class="json-container" style="width: 100%; padding:20px; box-sizing: border-box;">
 ${prettyPrintJson.toHtml(JSON.parse(readLogs()), { indent: 4, lineNumbers: true })}  
 </div>

@@ -409,7 +409,7 @@ const homePage = (apiPaths: string[]) => [
 }</pre>
                 <button class="copy-btn" id="mcp-copy-btn">Copy</button>
                 <span id="mcp-copy-status" style="font-size:0.98rem;"></span>
-                <p style="margin-top:18px;font-size:0.98rem;color:var(--text-muted);">Replace <code>&lt;absolute-path-to-your-project&gt;</code> with the full path to your project directory.</p>
+                <p style="margin-top:18px;font-size:0.98rem;color:var(--text-muted);">Replace <code>&lt;absolute-path-to-your-project&gt;</code> with the full path to your project directory and remember to use the path format suitable for your system (E.g &#92;&#92; on Windows).</p>
               </div>
             </div>
         </main>
@@ -467,7 +467,7 @@ const homePage = (apiPaths: string[]) => [
             checkServerStatus();
            
             // Check every 10 seconds
-            setInterval(checkServerStatus, 10000);
+            setInterval(checkServerStatus, 2000);
         });
         const mcpBtn = document.getElementById('mcp-connect-btn');
         const mcpModal = document.getElementById('mcp-modal');
