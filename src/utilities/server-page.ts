@@ -278,6 +278,86 @@ const homePage = (apiPaths: string[]) => [
                 margin-top: 18px;
                 text-align: center;
             }
+            .mcp-connect-btn {
+                display: inline-block;
+                margin: 12px auto 0 auto;
+                padding: 10px 22px;
+                background: var(--accent2);
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                font-size: 1.08rem;
+                font-weight: 600;
+                letter-spacing: 0.5px;
+                box-shadow: 0 2px 8px rgba(1,25,75,0.10);
+                cursor: pointer;
+                transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+            }
+            .mcp-connect-btn:hover, .mcp-connect-btn:focus {
+                background: var(--accent);
+                color: #fff;
+                box-shadow: 0 4px 16px rgba(79,138,139,0.18);
+                outline: none;
+            }
+            .mcp-modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 0;
+                top: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0,0,0,0.45);
+                justify-content: center;
+                align-items: center;
+            }
+            .mcp-modal.active {
+                display: flex;
+            }
+            .mcp-modal-content {
+                background: var(--bg-card);
+                color: var(--text-main);
+                padding: 32px 24px 24px 24px;
+                border-radius: 14px;
+                box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+                max-width: 480px;
+                width: 95vw;
+                text-align: left;
+                position: relative;
+            }
+            .mcp-modal-content pre {
+                background: #181c23;
+                color: #fff;
+                padding: 14px;
+                border-radius: 8px;
+                font-size: 0.98rem;
+                overflow-x: auto;
+                margin-bottom: 18px;
+            }
+            .mcp-modal-content button.copy-btn {
+                background: var(--accent);
+                color: #fff;
+                border: none;
+                border-radius: 6px;
+                padding: 7px 16px;
+                font-size: 1rem;
+                font-weight: 500;
+                cursor: pointer;
+                margin-right: 8px;
+            }
+            .mcp-modal-content button.close-btn {
+                background: #444;
+                color: #fff;
+                border: none;
+                border-radius: 6px;
+                padding: 7px 16px;
+                font-size: 1rem;
+                font-weight: 500;
+                cursor: pointer;
+                position: absolute;
+                top: 12px;
+                right: 12px;
+            }
         </style>
         <main>
             <section class="info-sticky">
@@ -310,6 +390,27 @@ const homePage = (apiPaths: string[]) => [
             <div class="note">
                 * Add new API endpoints to the <b>api</b> folder.<br/>
                 For media endpoints, include the media name in the URL (e.g., <code>/images/placeholder.png</code>).
+            </div>
+            <button class="mcp-connect-btn" id="mcp-connect-btn">Connect to MCP Server</button>
+            <div class="mcp-modal" id="mcp-modal">
+              <div class="mcp-modal-content">
+                <button class="close-btn" id="mcp-modal-close">Close</button>
+                <h2 style="margin-top:0;">Connect to MCP Server</h2>
+                <p>Copy and paste the following configuration into your client (Claude, Windsurf, Cursor, etc.):</p>
+                <pre id="mcp-config-json">{
+  "mcpServers": {
+    "LocalMockAPIServer": {
+      "command": "node",
+      "args": [
+        "&lt;absolute-path-to-your-project&gt;/src/mcp/server.js"
+      ]
+    }
+  }
+}</pre>
+                <button class="copy-btn" id="mcp-copy-btn">Copy</button>
+                <span id="mcp-copy-status" style="font-size:0.98rem;"></span>
+                <p style="margin-top:18px;font-size:0.98rem;color:var(--text-muted);">Replace <code>&lt;absolute-path-to-your-project&gt;</code> with the full path to your project directory.</p>
+              </div>
             </div>
         </main>
         <script>
@@ -368,6 +469,37 @@ const homePage = (apiPaths: string[]) => [
             // Check every 10 seconds
             setInterval(checkServerStatus, 10000);
         });
+        const mcpBtn = document.getElementById('mcp-connect-btn');
+        const mcpModal = document.getElementById('mcp-modal');
+        const mcpModalClose = document.getElementById('mcp-modal-close');
+        const mcpCopyBtn = document.getElementById('mcp-copy-btn');
+        const mcpCopyStatus = document.getElementById('mcp-copy-status');
+        if (mcpBtn && mcpModal && mcpModalClose) {
+            mcpBtn.addEventListener('click', function() {
+                mcpModal.classList.add('active');
+            });
+            mcpModalClose.addEventListener('click', function() {
+                mcpModal.classList.remove('active');
+                mcpCopyStatus.textContent = '';
+            });
+            mcpModal.addEventListener('click', function(e) {
+                if (e.target === mcpModal) {
+                    mcpModal.classList.remove('active');
+                    mcpCopyStatus.textContent = '';
+                }
+            });
+        }
+        if (mcpCopyBtn) {
+            mcpCopyBtn.addEventListener('click', function() {
+                const configText = document.getElementById('mcp-config-json').innerText;
+                navigator.clipboard.writeText(configText).then(function() {
+                    mcpCopyStatus.textContent = 'Copied!';
+                    setTimeout(() => { mcpCopyStatus.textContent = ''; }, 1500);
+                }, function() {
+                    mcpCopyStatus.textContent = 'Failed to copy.';
+                });
+            });
+        }
         </script>
     </body>
     </html>
