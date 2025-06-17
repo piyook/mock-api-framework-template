@@ -2,7 +2,7 @@
 ![Github actions](https://github.com/piyook/mock-api-framework-template/actions/workflows/tests.yaml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# Local Mock API Framework
+# Local Mock API Framework and MCP Server
 
 ## Purpose
 
@@ -24,6 +24,8 @@ The framework is written in TypeScript and can :
 - Perform CRUD operations on the local database via a REST endpoint
 - Mock API error codes/messages for testing frontend error handling logic
 - Log and store API requests in JSON format and display information on the localhost:8000/logs route
+
+The project has a local MCP server (experimental) to connect to LLM Agents (such as Claude Desktop, Cursor etc.,) that use the MCP protocol. This allows the Local Mock API server to be managed using an LLM for easier interactions during development.
 
 ## Set-up
 
@@ -63,7 +65,7 @@ A list of all endpoints can be viewed on http://localhost:8000/.
 
 The project has been set-up with demo endpoints that can be removed or modified as needed.
 
-![main server page](image.png)
+![main server page](images/image.png)
 
 ### Useful Commands
 
@@ -311,7 +313,7 @@ API request information and sent data can be logged and stored as JSON in the /s
 
 Logs can be viewed at **localhost:8000/logs**.
 
-![logging](logs.png)
+![logging](images/logs.png)
 
 ### Set-up
 
@@ -371,3 +373,74 @@ By default this is set to 8000 but can be changed by setting the SERVER_PORT in 
 ```js
 SERVER_PORT = 1234;
 ```
+
+# MCP Server (Experimental)
+
+### Set-up
+
+Connect the mcp server to the mock api server as described in your agents documentation. Note the MCP server.js file is in the src/mcp folder.
+
+You can run the command below to build the mcp server if needed.
+
+```bash
+npm run mcp:build
+```
+
+then use the path below to connect to the mcp server in the MCP config file
+
+```bash
+<path_to_the_local_project_folder>/src/mcp/server.js
+```
+
+### Usage
+
+You can request the LLM agent to start, stop and rebuild the LOCAL MOCK API server and to check for available api endpoints using the manage_local_mock_api_server tool.
+
+You can also request the agent build a new api endpoint using the create_new_api_endpoint tool.
+
+Note: the mcp server will only work with a local mock api server <b>running in a Docker container.</b>
+
+![mcp-1](images/mcp-1.png)
+
+![mcp-2](images/mcp-2.png)
+
+### Issues
+
+#### Node version managers
+
+If using a node version manager such as NVM or FNM in Windows, then you may need to either specify the entire path to the node binary in the mcp server config file or set the system NODE_PATH environment variable to direct the path of the fnm aliases directory (or create sym links in linux / mac) - see https://github.com/modelcontextprotocol/servers/issues/40#issuecomment-2588950176 or https://github.com/Schniz/fnm/issues/1366#issuecomment-2764510266
+
+E.g with fnm aliases in PATH the config below works with fnm and node
+
+```bash
+"mcpServers": {
+    "LocalMockAPIServer": {
+      "command": "node",
+      "args": [
+        "<path-to-your-project>\\mock-api-framework-template\\src\\mcp\\server.js"
+      ]
+    ...
+
+```
+
+#### Custom Port Numbers
+
+If changing the PORT number from 8000 in the env of the Mock Server then manually update the mcp/server.ts file PORT variable to the match the updated port number and run
+
+```bash
+npm run mcp:build
+```
+
+then restart your mcp agents to update the connection.
+
+### Debugging/Testing the MCP server
+
+You can test the mcp server using the mcp inspector tool (@modelcontextprotocol/inspector) by running
+
+```bash
+npm run mcp:debug
+```
+
+This will open a browser window and connect to the mcp server to manually run tools for testing.
+
+Note: This feature is currently experimental - log any issues here https://github.com/piyook/mock-api-framework-template/issues.
