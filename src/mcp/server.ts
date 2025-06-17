@@ -33,10 +33,15 @@ server.tool(
 	'ManageLocalMockAPIServer',
 	`tools to manage the local mock API endpoint server on localhost 
 	Args:
-	- action: Action to perform on the local mock API server - get_endpoints (gets endpoints), start_server (starts server), stop_server (stops server), rebuild_server (rebuilds server after code changes), add_endpoint (adds endpoint then you need to run rebuild_server action)
+	- action: Action to perform on the local mock API server - 
+		get_endpoints (gets endpoints), 
+		start_server (starts server), 
+		stop_server (stops server), 
+		rebuild_server (rebuilds server after code changes), 
+		add_endpoint (adds endpoint then you need to run rebuild_server action)
 	- name: Name of the API endpoint (only required for add_endpoint action)
 	- description: Description of the API endpoint (only required for add_endpoint action)
-	- code: Code for the API endpoint (should be a valid TypeScript file content following the format described in the get_code_format tool )`,
+	- code: Code for the API endpoint (should be a valid TypeScript file content following the format described in the get_code_format request )`,
 	{
 		action: z.enum([
 			'get_endpoints',
