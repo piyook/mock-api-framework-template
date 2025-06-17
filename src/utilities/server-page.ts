@@ -362,7 +362,7 @@ const homePage = (apiPaths: string[]) => [
         <main>
             <section class="info-sticky">
                 <h1>Mock Server</h1>
-                <div class="status-box">
+                <div class="status-box" cy-data="server_status">
                     <span class="status" id="server-status">
                         <span class="status-tick" id="status-icon" aria-label="running" title="Running">
                             <!-- SVG will be dynamically updated here -->
@@ -372,13 +372,13 @@ const homePage = (apiPaths: string[]) => [
                     </span>
                 </div>
                 <ul class="info-list">
-                    <li><span class="info-label">Server Address:</span><span class="highlight" cy-data="server_address">localhost</span></li>
-                    <li><span class="info-label">Server Port:</span><span class="highlight" cy-data="server_port">${env?.SERVER_PORT?.toUpperCase() ?? 'NONE'}</span></li>
-                    <li><span class="info-label">Server URL Prefix:</span><span class="highlight" cy-data="url_prefix">${env?.USE_API_URL_PREFIX?.toLowerCase() ?? 'NONE'}</span></li>
+                    <li><span class="info-label" cy-data="server_address">Server Address:</span><span class="highlight" cy-data="server_address">localhost</span></li>
+                    <li><span class="info-label" cy-data="server_port">Server Port:</span><span class="highlight" cy-data="server_port">${env?.SERVER_PORT?.toUpperCase() ?? 'NONE'}</span></li>
+                    <li><span class="info-label" cy-data="server_prefix">Server URL Prefix:</span><span class="highlight" cy-data="url_prefix">${env?.USE_API_URL_PREFIX?.toLowerCase() ?? 'NONE'}</span></li>
                 </ul>
             </section>
             <section>
-                <div style="margin-bottom: 8px; font-size: 1.13rem; color: var(--text-muted); font-weight: 600;">API endpoints*</div>
+                <div style="margin-bottom: 8px; font-size: 1.13rem; color: var(--text-muted); font-weight: 600;" cy-data="server_label">API endpoints*</div>
                 <div class="endpoints">
                     ${apiPaths.map((path) => `<a class="endpoint-link" cy-data="endpoint" href="/${prefix}${path}">/${prefix}${path}</a>`).join('')}
                 </div>
