@@ -61,7 +61,7 @@ npm start
 
 The list of available APIs can be viewed on localhost:8000/api by default but this can be customised - see later.
 
-A list of all endpoints can be viewed on http://localhost:8000/.
+A list of all endpoints can be viewed on the mock server dashboard at http://localhost:8000/.
 
 The project has been set-up with demo endpoints that can be removed or modified as needed.
 
