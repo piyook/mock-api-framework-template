@@ -112,6 +112,12 @@ const homePage = (apiPaths: string[]) => [
                 padding-right:0.2em;
           
             }
+            .status-online {
+                background: var(--accent);
+            }
+            .status-offline {
+                background: #ff4136; /* Red color for offline */
+            }
 
             @media (max-width: 700px) {
                 main {
@@ -194,8 +200,7 @@ const homePage = (apiPaths: string[]) => [
             }
             .status {
                 display: inline-block;
-                background: var(--accent);
-                color: #fff;
+                color: #fff; /* Removed background here to be set dynamically */
                 border-radius: 8px;
                 padding: 8px 16px;
                 font-size: 1.1rem;
@@ -277,9 +282,15 @@ const homePage = (apiPaths: string[]) => [
         <main>
             <section class="info-sticky">
                 <h1>Mock Server</h1>
-<div class="status-box"><span class="status"><span class="status-tick" aria-label="running" title="Running">
-<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="10" fill="#2ecc40"/><path d="M6 10.5l3 3 5-6.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-</span>Running&#32;<span class="running-dots"></span></span></div>
+                <div class="status-box">
+                    <span class="status" id="server-status">
+                        <span class="status-tick" id="status-icon" aria-label="running" title="Running">
+                            <!-- SVG will be dynamically updated here -->
+                        </span>
+                        <span id="status-text">Checking...</span>
+                        <span class="running-dots"></span>
+                    </span>
+                </div>
                 <ul class="info-list">
                     <li><span class="info-label">Server Address:</span><span class="highlight" cy-data="server_address">localhost</span></li>
                     <li><span class="info-label">Server Port:</span><span class="highlight" cy-data="server_port">${env?.SERVER_PORT?.toUpperCase() ?? 'NONE'}</span></li>
@@ -304,14 +315,58 @@ const homePage = (apiPaths: string[]) => [
         <script>
         document.addEventListener('DOMContentLoaded', function() {
             var dots = document.querySelector('.running-dots');
-            if (dots) {
-                let count = 1, step = 1;
-                setInterval(() => {
-                    dots.textContent = '.'.repeat(count);
-                    count += step;
-                    if (count === 3 || count === 1) step *= -1;
-                }, 300);
+            let dotsInterval = null; // Declare dotsInterval here
+
+            const statusIcon = document.getElementById('status-icon');
+            const statusText = document.getElementById('status-text');
+            const serverStatus = document.getElementById('server-status');
+           
+            const onlineSvg = '<svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="10" fill="#2ecc40"/><path d="M6 10.5l3 3 5-6.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+            const offlineSvg = '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="#ff4136"/><path d="M15 9L9 15M9 9L15 15" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+           
+            async function checkServerStatus() {
+                try {
+                    const response = await fetch('/ping'); // Assuming a /ping endpoint for status
+                    if (response.ok) {
+                        statusIcon.innerHTML = onlineSvg;
+                        statusText.textContent = 'Running';
+                        serverStatus.classList.remove('status-offline');
+                        serverStatus.classList.add('status-online');
+                        if (dots) {
+                            dots.style.display = 'inline-block'; // Show dots
+                            if (!dotsInterval) { // Start animation only if not already running
+                                let count = 1, step = 1;
+                                dotsInterval = setInterval(() => {
+                                    dots.textContent = '.'.repeat(count);
+                                    count += step;
+                                    if (count === 3 || count === 1) step *= -1;
+                                }, 300);
+                            }
+                        }
+                    } else {
+                        throw new Error('Server not OK');
+                    }
+                } catch (error) {
+                    statusIcon.innerHTML = offlineSvg;
+                    statusText.textContent = 'Not Connected';
+                    serverStatus.classList.remove('status-online');
+                    serverStatus.classList.add('status-offline');
+                    if (dots) {
+                        if (dotsInterval) { // Stop animation if running
+                            clearInterval(dotsInterval);
+                            dotsInterval = null;
+                        }
+                        dots.textContent = ''; // Clear dots
+                        dots.style.display = 'none'; // Hide dots
+                    }
+                }
             }
+           
+            // Initial check
+            checkServerStatus();
+           
+            // Check every 10 seconds
+            setInterval(checkServerStatus, 10000);
         });
         </script>
     </body>
@@ -320,6 +375,9 @@ const homePage = (apiPaths: string[]) => [
 		return new HttpResponse(htmlString, {
 			headers: { 'Content-Type': 'text/html' },
 		});
+	}),
+	http.get(`/ping`, () => {
+		return new HttpResponse(null, { status: 200 });
 	}),
 ];
 
