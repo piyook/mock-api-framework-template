@@ -380,7 +380,7 @@ SERVER_PORT = 1234;
 
 Connect the mcp server to the mock api server as described in your agents documentation. Note the MCP server.js file is in the src/mcp folder.
 
-You can run the command below to build the mcp server if needed.
+You can run the command below to build the mcp server.js file if needed.
 
 ```bash
 npm run mcp:build
@@ -443,4 +443,6 @@ npm run mcp:debug
 
 This will open a browser window and connect to the mcp server to manually run tools for testing.
 
-Note: This feature is currently experimental - log any issues here https://github.com/piyook/mock-api-framework-template/issues.
+### New Issues
+
+Note: The MCP Server feature is currently experimental - log any issues here https://github.com/piyook/mock-api-framework-template/issues.
