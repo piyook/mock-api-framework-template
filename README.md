@@ -1,404 +1,383 @@
+# Local Mock API Framework
+
 ![GitHub Release](https://img.shields.io/github/v/release/piyook/mock-api-framework-template)
 ![Github actions](https://github.com/piyook/mock-api-framework-template/actions/workflows/tests.yaml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# Local Mock API Framework
+## Table of Contents
 
-## Purpose
+- [Overview](#overview)
+- [Quick Start](#quick-start)
+    - [Prerequisites](#prerequisites)
+    - [Installation & Setup](#installation--setup)
+    - [Alternative: Local Development](#alternative-local-development)
+    - [Useful Commands](#useful-commands)
+- [Creating API Endpoints](#creating-api-endpoints)
+    - [File-Based Routing](#1-file-based-routing)
+    - [Handler Implementation](#2-handler-implementation)
+    - [Database Integration](#3-database-integration-optional)
+- [Data Management](#data-management)
+    - [Seeding Options](#seeding-options)
+    - [Git LFS for Large Files](#git-lfs-for-large-files)
+- [Serving Static Resources](#serving-static-resources)
+    - [Images and Videos](#images-and-videos)
+    - [Markdown Files](#markdown-files)
+    - [JSON Files](#json-files)
+- [Advanced Features](#advanced-features)
+    - [Custom Middleware](#custom-middleware)
+    - [Error Testing](#error-testing)
+    - [CORS Configuration](#cors-configuration)
+    - [AWS Lambda Development](#aws-lambda-development)
+- [Request Logging](#request-logging)
+    - [Enable Logging](#enable-logging)
+    - [Implement Logging](#implement-logging)
+- [Configuration](#configuration)
+    - [Environment Variables](#environment-variables)
+    - [URL Structure Examples](#url-structure-examples)
+- [MCP Server Integration (Experimental)](#mcp-server-integration-experimental)
+    - [Setup](#setup)
+    - [Available Tools](#available-tools)
+    - [Debugging MCP](#debugging-mcp)
+    - [Known Issues](#known-issues)
+- [Development Workflow](#development-workflow)
+    - [Best Practices](#best-practices)
+    - [Folder Structure](#folder-structure)
+- [Contributing](#contributing)
+- [Resources](#resources)
 
-The purpose of this project is to provide a quick-to-set-up standalone local mock API framework to develop API endpoints running on localhost.
+## Overview
 
-This can be used for serving a variety of different content, such as JSON data, images, videos and markdown for testing API code and logic before deploying to live servers or quickly producing API endpoints for rapid prototyping for developing frontend clients for web or mobile.
+A quick-to-setup standalone local mock API framework for developing API endpoints on localhost. Perfect for testing API code, rapid prototyping, and developing frontend clients before deploying to live servers.
 
-The project is built using MSW and can be run directly on a local machine or in Docker containers.
+Built with MSW and TypeScript, this framework can run directly on your local machine or in Docker containers.
 
-The framework is written in TypeScript and can :
+### Key Features
 
-- Serve data from static files (JSON or text)
-- Serve media : Images (which can be dynamically resized using url parameters) and Videos
-- Serve markdown files
-- Be used to write and test AWS Lambda Functions
-- Use custom middleware to transform input/output
-- Serve random Database seed data
-- Serve persisted mock data to the database
-- Perform CRUD operations on the local database via a REST endpoint
-- Mock API error codes/messages for testing frontend error handling logic
-- Log and store API requests in JSON format and display information on the localhost:8000/logs route
+- **Static File Serving**: JSON, text, images (with dynamic resizing), videos, and markdown
+- **Database Operations**: CRUD operations with persistent or temporary mock data
+- **AWS Lambda Testing**: Develop and test Lambda functions locally
+- **Custom Middleware**: Transform input/output with custom logic
+- **Error Mocking**: Test frontend error handling with configurable error responses
+- **Request Logging**: Store and view API requests at `localhost:8000/logs`
+- **MCP Server**: Experimental LLM agent integration for server management
 
-The project has a local MCP server (experimental) to connect to LLM Agents and IDE's that use the MCP protocol. This allows the Local Mock API server to be managed using an LLM for easier interactions during development.
+## Quick Start
 
-## Set-up
+### Prerequisites
 
-#### Requirements
+- Node.js 20+
+- Docker
 
-Node 20+ and Docker.
+### Installation & Setup
 
-#### Git LFS
+1. **Clone and install dependencies**
 
-You can use git LFS to handle large files such as database files, videos or image files.
+    ```bash
+    npm install
+    ```
 
-Use LFS to track large database files by running the command below
+2. **Start with Docker** (recommended)
 
-```bash
-git lfs track --filename src/data/data.json
-```
+    ```bash
+    npm start
+    ```
 
-To track other types of files such as images or videos run the command below with the desired file type
-
-```bash
-git lfs track "*.png"
-```
-
-## Starting
-
-#### Docker
-
-To start in Docker run
-
-```bash
-npm start
-```
-
-The list of available APIs can be viewed on localhost:8000/api by default but this can be customised - see later.
-
-A list of all endpoints can be viewed on the mock server dashboard at http://localhost:8000/.
-
-The project has been set-up with demo endpoints that can be removed or modified as needed.
+3. **View your APIs**
+    - Dashboard: http://localhost:8000/
+    - API list: http://localhost:8000/api
 
 ![main server page](images/image.png)
 
-### Useful Commands
+### Alternative: Local Development
 
-To stop and remove containers run
-
-```bash
-npm stop
-```
-
-To rebuild containers run :
-
-```bash
-npm run rebuild
-```
-
-To destroy everything and then rebuild the project (removing node modules, caches and all docker resources) run:
-
-```bash
-npm run nuke
-```
-
-#### Local Machine
-
-To run directly on your local machine instead of Docker
+For active development:
 
 ```bash
 npm run dev
 ```
 
-## Using the Mock API Framework
+### Useful Commands
 
-### Setting up a new API route
+| Command           | Description                    |
+| ----------------- | ------------------------------ |
+| `npm start`       | Start in Docker                |
+| `npm stop`        | Stop and remove containers     |
+| `npm run rebuild` | Rebuild containers             |
+| `npm run nuke`    | Destroy everything and rebuild |
+| `npm run dev`     | Run locally (for development)  |
 
-The system uses file-based routing (similar to NextJS) - simply create a folder in '/api' that is then mapped to an api route with the folder name.
+## Creating API Endpoints
 
-This repo contains some existing APIs as starter demos and templates to create new endpoints for any project.
+### 1. File-Based Routing
 
-For example to create a new api route (E.g api/users)
+The system uses NextJS-style file-based routing. Create a folder in `/api` that maps to your desired route.
 
-#### 1. Create a **new folder** within the api folder the api path name you want:
+**Example: Creating `/api/users`**
 
 ```bash
 mkdir src/api/users
 ```
 
-#### IMPORTANT
+### 2. Handler Implementation
 
-Remember to use 'npm run dev' to start a local dev server when developing new API endpoints.
+Create `api.ts` in your new folder:
 
-Once endpoints have been developed and tested then use 'npm run start' to build the docker image and start a container to serve the endpoints on localhost (or use 'npm run rebuild' or 'npm run nuke' if changes need to be made to an existing docker image).
+```typescript
+// src/api/users/api.ts
+import { http, HttpResponse } from 'msw';
 
-#### 2. Create an **api.ts** file in this new folder and add handler logic here - see https://github.com/mswjs/msw for information on writing handlers.
+function handler(pathName: string) {
+	return [
+		http.get(`/${pathName}`, ({ request }) => {
+			// Your GET logic here
+			return HttpResponse.json({ users: [] });
+		}),
+		http.post(`/${pathName}`, ({ request }) => {
+			// Your POST logic here
+			return HttpResponse.json({ success: true });
+		}),
+	];
+}
 
-Also take a look at the various example handlers in the api folder.
-
-The mock api framework uses the msw-data utility - see https://github.com/mswjs/data and a full rest or graphql api can be automatically set-up from this without having to define each handler using the format below
-
-```js
-...db.user.toHandlers('rest')
+export default handler;
 ```
 
-#### 3. Create a database (if required)
+### 3. Database Integration (Optional)
 
-Database models are held in **/models** directory.
+#### Create Models
 
-a. Create new models in this directory as required - see the users.ts and posts.ts examples.
+Models go in `/models` directory:
 
-b. Import the new model into the db.ts file and add to the factory function - https://github.com/mswjs/data for more details
+```typescript
+// models/users.ts
+import { primaryKey } from '@mswjs/data';
 
-#### 4. Seeding the database
-
-#### a. manually add data via POST/PUT Requests
-
-Data can be manually added / amended via POST/PUT requests to the relevant REST endpoint. This data wont persist and will be lost when the server is restarted.
-
-OR
-
-#### b. seed database with fake data.
-
-It is possible to seed the database with fake data using seeder functions and faker.js. See the seeders/user-seeder.ts and models/user.ts example.
-
-Database seeders are located in the seeders folder.
-
-**Note**: New seeders should be created here and added to the index.ts file in the same folder in order to be automatically imported and executed on server start.
-This data will be different each time the server is started and the seeders re-run.
-
-OR
-
-#### c. populate the database with existing data
-
-You can create a data.json file in the /data folder and import this to seed the database with data that will persist and be the same each time the server is started.
-
-See the seeders/post-seeder.ts and models/post.ts example
-
-#### 5. Serving Static Resources
-
-Static resources such as json data, markdown, image or video files can be served by adding the file into the relevant directory in the resources folder.
-
-The files can then be accessed from the relevant url - see later.
-
-```js
-http://localhost:8000/markdown/demo
+export const userModel = {
+	id: primaryKey(String),
+	name: String,
+	email: String,
+};
 ```
 
-### 5. Making Http Requests
+#### Register Models
 
-Given the "user" model definition above, the following request handlers are auto-generated and connected to the respective database operations:
+Add to `db.ts`:
 
-```js
-    GET /users/:id // (Where "id" is your model's primary key), returns a user by ID;
-    GET /users  // Returns all users (supports pagination);
-    POST /users // Creates a new user;
-    PUT /users/:id // Updates an existing user by ID;
-    DELETE /users/:id // Deletes an existing user by ID;
+```typescript
+import { userModel } from './models/users';
+
+export const db = factory({
+	user: userModel,
+	// ... other models
+});
 ```
 
-The "/user" part of the route is derived from your model name. For example, if you had a "post" model defined in your factory, then the generated handlers would be /posts, /posts/:id, etc.
+#### Auto-Generated REST API
 
-If handlers are manually created (E.g as in the Bikes folder) - then only the explicitly defined endpoints will be available.
+Using `db.user.toHandlers('rest')` automatically creates:
 
-### 6. Middleware
+- `GET /users` - List all users
+- `GET /users/:id` - Get user by ID
+- `POST /users` - Create user
+- `PUT /users/:id` - Update user
+- `DELETE /users/:id` - Delete user
 
-**Custom handlers** can contain 'middleware' code defined in an individual handler for each route and http header verb.
+## Data Management
 
-See the cat api for examples of custom handlers getting information from the database and bikes api for examples of simple 'middleware' added to a custom route.
+### Seeding Options
 
-Url parameters can be extracted using
+Choose one of three approaches:
 
-```js
-url.searchParams.get('type');
+#### Option 1: Manual Data Entry
+
+Add data via POST/PUT requests (temporary, lost on restart)
+
+#### Option 2: Fake Data Generation
+
+Use seeders with faker.js for random data:
+
+```typescript
+// seeders/user-seeder.ts
+import { faker } from '@faker-js/faker';
+import { db } from '../db';
+
+export function seedUsers() {
+	for (let i = 0; i < 10; i++) {
+		db.user.create({
+			id: faker.string.uuid(),
+			name: faker.person.fullName(),
+			email: faker.internet.email(),
+		});
+	}
+}
 ```
 
-where type is a url parameter (/api/bikes/?type=KawasakiNinja). This can then be used in the middleware code as required.
+#### Option 3: Persistent Data
 
-Dynamic url pathnames (e.g localhost/api/images/:imageId) can be extracted using
+Create `data.json` in `/data` folder for consistent data across restarts.
 
-```js
-const params = url.pathname.split('/').pop();
+### Git LFS for Large Files
+
+For large database files, images, or videos:
+
+```bash
+# Track database files
+git lfs track --filename src/data/data.json
+
+# Track image files
+git lfs track "*.png"
 ```
 
-where params will be the value of :imageId
+## Serving Static Resources
 
-#### CORS
+### Images and Videos
 
-For browser-based client application requests, set the desired CORS responses in the headers object in the relevant handler. For example, you can give any domain access to the resources using the wildcard '\*' or alternatively specify a permitted domain such as 'localhost:3000' for nextJS.
+Store files in `src/resources/{images|videos}` and access via:
 
-```js
- headers: {
-                        'Content-Type': 'text/html',
-                        'Access-Control-Allow-Origin': '*',
-                    },
+```
+http://localhost:8000/api/images/placeholder.png
+http://localhost:8000/api/videos/sample.mp4
 ```
 
-### 7. Available endpoints
+#### Dynamic Image Resizing
 
-Available endpoints are listed at the url root
-
-```js
-http://localhost:8000
-```
-
-### 8. AWS Lambda Functions
-
-Lambda functions can be developed in the mock framework and then used in AWS CDK code.
-
-Lambda functions are stored in the src/lambdas directory.
-
-When a lambda is called from an api, the MSW/ExpressJS request object needs to be converted into an AWS API Gateway Proxy Event object using the requestToApiGatewayProxyEvent function in utilities. This mocks how a real API Gateway sends URL queries and body data to a Lambda so lambda code developed in should work in an API Rest Gateway setup.
-
-Lambda functions created using NodeJSFunction() in the AWS CDK will be built and bundled using esbuild by the AWS CDK. Functions developed in this framework should work as expected but it will be necessary to check this using LocalStack or in a test AWS sandbox account.
-
-### 9. Images and Videos
-
-Images and Videos should be stored in the src/resources/{images or videos} folder.  
-They can be accessed using the format http://localhost:8000/api/images/{image_filename.ext}.  
-E.g
-
-```js
-    http://localhost:8000/api/images/placeholder.png
-```
-
-and
-
-```js
-    http://localhost:8000/api/videos/placeholder.mp4
-```
-
-#### 9.1 Resizing images
-
-Images should be saved in PNG format. To get an image of any required size, pass the pixel width and height in the url parameters.
-Note: both a height AND a width need to be passed for the image to resize otherwise the default size is used.
+Resize PNG images by adding width and height parameters:
 
 ```
 http://localhost:8000/api/images/placeholder.png?width=300&height=500
 ```
 
-### 10. Markdown
+### Markdown Files
 
-Markdown can be served from the markdown folder in src/resources/markdown and supports code highlighting. Note the url doesn't need to include .md
+Store in `src/resources/markdown` with code highlighting support:
 
 ```
 http://localhost:8000/api/markdown/demo
 ```
 
-### 11. JSON files
+### JSON Files
 
-JSON files are stored in the src/resources/json folder. See the api/json example which can be accessed from 'api/json/{filename}' (i.e without the .json extension).
+Store in `src/resources/json`:
 
 ```
 http://localhost:8000/api/json/demo
 ```
 
-### 12. Templates
+## Advanced Features
 
-The templates directory contains some templates for different type of handlers, models and seeders but the demo api endpoints can just as easily be copied and modified for individual use cases.
+### Custom Middleware
 
-### 13. Error Route
+Extract URL parameters and add custom logic:
 
-It can be useful to mock api errors in order to test frontend error handling logic.
+```typescript
+// URL parameters: /api/bikes/?type=KawasakiNinja
+const type = url.searchParams.get('type');
 
-To do this redirect frontend fetch requests to the api/error route.
+// Dynamic paths: /api/images/:imageId
+const imageId = url.pathname.split('/').pop();
+```
+
+### Error Testing
+
+Mock API errors for frontend testing:
 
 ```
+# Default 404 error
 http://localhost:8000/api/error
-```
 
-The default error for this route is a '404: not found' error but if specific errors are required, then this can be customised by passing 'status' to the endpoint and also a custom 'message' if required.
-
-E.g to mimic a 500 'Internal Server Error'
-
-```
+# Custom error
 http://localhost:8000/api/error?status=500&message=Internal%20Server%20Error
 ```
 
-this will return a 500 error code and the JSON response below:
+### CORS Configuration
 
-```
-{"error":"500: Internal Server Error"}
+Set CORS headers in your handlers:
 
-```
-
-## Logging
-
-API request information and sent data can be logged and stored as JSON in the /src/logs/ folder.
-
-Logs can be viewed at **localhost:8000/logs**.
-
-![logging](images/logs.png)
-
-### Set-up
-
-To enable logging set the environment variables below in the .env
-
-```js
-LOG_REQUESTS = ON;
-DELETE_LOGS_ON_SERVER_RESTART = ON;
-```
-
-You can choose to refresh the logfile every time the server restarts or persist the data by setting the DELETE_LOGS_ON_SERVER_RESTART variable.
-
-To set up logging for a route, add the following to the api.ts file in the relevant handler, adjusting the request type (GET/POST/PUT/DELETE) and passing data to be logged as required:
-
-```js
-import logger from '../../utilities/logger';
-
-function handler(pathName: string) {
-    return [
-         http.get(`/${pathName}`, ({ request }) => {
-
-            ...
-                    logger({
-                            data: { <- extracted request body or query params data here -> },
-                            pathName,
-                            type: 'GET',
-                            });
-            ...
-         }),
-    ]
+```typescript
+headers: {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*', // or 'localhost:3000'
 }
 ```
 
-**See the src/api/bikes api.ts file for an example of logging set up.**
+### AWS Lambda Development
 
-## Customisation
+Develop Lambda functions in `src/lambdas` directory. Use `requestToApiGatewayProxyEvent` utility to convert MSW requests to AWS API Gateway format.
 
-### Changing api url prefix
+## Request Logging
 
-By default the api paths will be prefixed with "api/" this can be modified with the
-USE_API_URL_PREFIX environment variable in the .env file.
+Monitor API requests and responses at `localhost:8000/logs`.
 
-By setting this to blank then the path will just be the api name E.g localhost:8000/users
+![logging](images/logs.png)
 
-You can set this to any value E.g
+### Enable Logging
 
-```js
-USE_API_URL_PREFIX = things;
+Set environment variables in `.env`:
+
+```env
+LOG_REQUESTS=ON
+DELETE_LOGS_ON_SERVER_RESTART=ON
 ```
 
-will give localhost:8000/things/users
+### Implement Logging
 
-### Change port number
+Add to your handlers:
 
-By default this is set to 8000 but can be changed by setting the SERVER_PORT in the .env file:
+```typescript
+import logger from '../../utilities/logger';
 
-```js
-SERVER_PORT = 1234;
+logger({
+	data: extractedData,
+	pathName,
+	type: 'GET',
+});
 ```
 
-# MCP Server (Experimental)
+## Configuration
 
-### Set-up
+### Environment Variables
 
-Connect the mcp server as described in your agents or IDE's documentation. Note the MCP server.js file is in the src/mcp folder.
+Customize your setup in `.env`:
 
-You can run the command below to build the mcp server.js file if needed.
+```env
+# Change API prefix (default: "api")
+USE_API_URL_PREFIX=api
 
-```bash
-npm run mcp:build
+# Change port (default: 8000)
+SERVER_PORT=8000
+
+# Logging
+LOG_REQUESTS=ON
+DELETE_LOGS_ON_SERVER_RESTART=ON
 ```
 
-then use the path below to connect to the mcp server in the MCP config file replacing with your full local mcp server file path
+### URL Structure Examples
 
-```bash
-<path_to_the_local_project_folder>/src/mcp/server.js
-```
+With different `USE_API_URL_PREFIX` settings:
 
-### Usage
+- Default: `localhost:8000/api/users`
+- Empty: `localhost:8000/users`
+- Custom: `localhost:8000/things/users`
 
-You can request the LLM agent to start, stop and rebuild the LOCAL MOCK API server and to check for available api endpoints using the manage_local_mock_api_server tool.
+## MCP Server Integration (Experimental)
 
-You can also request the agent build a new api endpoint using the create_new_api_endpoint tool.
+### Setup
 
-Note: the mcp server will only work with a local mock api server <b>running in a Docker container.</b>
+1. **Build MCP server**
+
+    ```bash
+    npm run mcp:build
+    ```
+
+2. **Configure your LLM agent** with the server path:
+    ```bash
+    <path_to_project>/src/mcp/server.js
+    ```
+
+### Available Tools
+
+- **Server Management**: Start, stop, rebuild, and check endpoints
+- **Endpoint Creation**: Generate new API endpoints via LLM
 
 ![mcp-1](images/mcp-1.png)
 
@@ -406,45 +385,65 @@ Note: the mcp server will only work with a local mock api server <b>running in a
 
 ![mcp-3](images/mcp-3.png)
 
-### Issues
+### Debugging MCP
 
-#### Node version managers
-
-If using a node version manager such as NVM or FNM in Windows, then you may need to either specify the entire path to the node binary in the mcp server config file or set the system PATH environment variable to direct the path of the fnm aliases directory (or create sym links in linux / mac) - see https://github.com/modelcontextprotocol/servers/issues/40#issuecomment-2588950176 or https://github.com/Schniz/fnm/issues/1366#issuecomment-2764510266
-
-E.g with fnm aliases in PATH the config below works with fnm and node
-
-```bash
-"mcpServers": {
-    "LocalMockAPIServer": {
-      "command": "node",
-      "args": [
-        "<path-to-your-project>\\mock-api-framework-template\\src\\mcp\\server.js"
-      ]
-    ...
-
-```
-
-#### Custom Port Numbers
-
-If changing the PORT number from 8000 in the env of the Mock Server then manually update the mcp/server.ts file PORT variable to the match the updated port number and run
-
-```bash
-npm run mcp:build
-```
-
-then restart your mcp agents to update the connection.
-
-### Debugging/Testing the MCP server
-
-You can test the mcp server using the mcp inspector tool (@modelcontextprotocol/inspector) by running
+Test the MCP server with the inspector:
 
 ```bash
 npm run mcp:debug
 ```
 
-This will open a browser window and connect to the mcp server to manually run tools for testing.
+### Known Issues
 
-### New Issues
+#### Node Version Managers
 
-Note: The MCP Server feature is currently experimental - log any issues here https://github.com/piyook/mock-api-framework-template/issues.
+With NVM/FNM on Windows, you may need to:
+
+- Specify full path to node binary, or
+- Add fnm aliases directory to system PATH
+
+#### Custom Ports
+
+If changing from port 8000, update `mcp/server.ts` PORT variable and rebuild:
+
+```bash
+npm run mcp:build
+```
+
+## Development Workflow
+
+### Best Practices
+
+1. **Development**: Use `npm run dev` for active development
+2. **Testing**: Use `npm start` for Docker-based testing
+3. **File Organization**: Follow the established folder structure
+4. **Error Handling**: Test error scenarios using the error endpoint
+5. **Logging**: Enable logging during development for debugging
+
+### Folder Structure
+
+```
+src/
+├── api/                 # API endpoints (file-based routing)
+├── models/              # Database models
+├── seeders/             # Database seeders
+├── lambdas/             # AWS Lambda functions
+├── resources/           # Static files
+│   ├── images/
+│   ├── videos/
+│   ├── markdown/
+│   └── json/
+├── logs/                # Request logs
+├── mcp/                 # MCP server files
+└── utilities/           # Helper functions
+```
+
+## Contributing
+
+This project uses MIT license. For issues with the experimental MCP server, please report them at: https://github.com/piyook/mock-api-framework-template/issues
+
+## Resources
+
+- [MSW Documentation](https://github.com/mswjs/msw)
+- [MSW Data Utilities](https://github.com/mswjs/data)
+- [Model Context Protocol](https://modelcontextprotocol.io/)
