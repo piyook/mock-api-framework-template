@@ -509,7 +509,10 @@ const homePage = (apiPaths: string[]) => [
 		});
 	}),
 	http.get(`/ping`, () => {
-		return new HttpResponse(null, { status: 200 });
+		return HttpResponse.json(
+			{ response: 'server is running' },
+			{ status: 200 },
+		);
 	}),
 ];
 
