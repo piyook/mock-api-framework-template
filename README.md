@@ -404,6 +404,8 @@ Note: the mcp server will only work with a local mock api server <b>running in a
 
 ![mcp-2](images/mcp-2.png)
 
+![mcp-3](images/mcp-3.png)
+
 ### Issues
 
 #### Node version managers
