@@ -2,7 +2,7 @@
 ![Github actions](https://github.com/piyook/mock-api-framework-template/actions/workflows/tests.yaml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-# Local Mock API Framework and MCP Server
+# Local Mock API Framework
 
 ## Purpose
 
@@ -25,7 +25,7 @@ The framework is written in TypeScript and can :
 - Mock API error codes/messages for testing frontend error handling logic
 - Log and store API requests in JSON format and display information on the localhost:8000/logs route
 
-The project has a local MCP server (experimental) to connect to LLM Agents (such as Claude Desktop, Cursor etc.,) that use the MCP protocol. This allows the Local Mock API server to be managed using an LLM for easier interactions during development.
+The project has a local MCP server (experimental) to connect to LLM Agents and IDE's that use the MCP protocol. This allows the Local Mock API server to be managed using an LLM for easier interactions during development.
 
 ## Set-up
 
@@ -378,7 +378,7 @@ SERVER_PORT = 1234;
 
 ### Set-up
 
-Connect the mcp server to the mock api server as described in your agents documentation. Note the MCP server.js file is in the src/mcp folder.
+Connect the mcp server as described in your agents or IDE's documentation. Note the MCP server.js file is in the src/mcp folder.
 
 You can run the command below to build the mcp server.js file if needed.
 
@@ -386,7 +386,7 @@ You can run the command below to build the mcp server.js file if needed.
 npm run mcp:build
 ```
 
-then use the path below to connect to the mcp server in the MCP config file
+then use the path below to connect to the mcp server in the MCP config file replacing with your full local mcp server file path
 
 ```bash
 <path_to_the_local_project_folder>/src/mcp/server.js
@@ -404,11 +404,13 @@ Note: the mcp server will only work with a local mock api server <b>running in a
 
 ![mcp-2](images/mcp-2.png)
 
+![mcp-3](images/mcp-3.png)
+
 ### Issues
 
 #### Node version managers
 
-If using a node version manager such as NVM or FNM in Windows, then you may need to either specify the entire path to the node binary in the mcp server config file or set the system NODE_PATH environment variable to direct the path of the fnm aliases directory (or create sym links in linux / mac) - see https://github.com/modelcontextprotocol/servers/issues/40#issuecomment-2588950176 or https://github.com/Schniz/fnm/issues/1366#issuecomment-2764510266
+If using a node version manager such as NVM or FNM in Windows, then you may need to either specify the entire path to the node binary in the mcp server config file or set the system PATH environment variable to direct the path of the fnm aliases directory (or create sym links in linux / mac) - see https://github.com/modelcontextprotocol/servers/issues/40#issuecomment-2588950176 or https://github.com/Schniz/fnm/issues/1366#issuecomment-2764510266
 
 E.g with fnm aliases in PATH the config below works with fnm and node
 

@@ -116,7 +116,7 @@ const homePage = (apiPaths: string[]) => [
                 background: var(--accent);
             }
             .status-offline {
-                background: #ff4136; /* Red color for offline */
+                background:rgb(126, 80, 78); /* Red color for offline */
             }
 
             @media (max-width: 700px) {
@@ -449,7 +449,7 @@ const homePage = (apiPaths: string[]) => [
                     }
                 } catch (error) {
                     statusIcon.innerHTML = offlineSvg;
-                    statusText.textContent = 'Not Connected';
+                    statusText.textContent = 'Not Running';
                     serverStatus.classList.remove('status-online');
                     serverStatus.classList.add('status-offline');
                     if (dots) {
