@@ -24,6 +24,15 @@ function handler(pathName: string) {
 				},
 			);
 		}),
+		http.get(`/${pathName}/list`, () => {
+			return HttpResponse.json(
+				{
+					mediaType: 'image',
+					files: fs.readdirSync('./src/resources/images'),
+				},
+				{},
+			);
+		}),
 		http.get(`/${pathName}/:imageID`, async ({ request }) => {
 			const url = new URL(request.url);
 			const width = url.searchParams.get('width');

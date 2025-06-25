@@ -23,6 +23,15 @@ function handler(pathName: string) {
 				},
 			);
 		}),
+		http.get(`/${pathName}/list`, () => {
+			return HttpResponse.json(
+				{
+					mediaType: 'video',
+					files: fs.readdirSync('./src/resources/videos'),
+				},
+				{},
+			);
+		}),
 		http.get(`/${pathName}/:videoID`, async ({ request }) => {
 			const url = new URL(request.url);
 			const params = url.pathname.split('/').pop();
