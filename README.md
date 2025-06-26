@@ -386,6 +386,8 @@ With different `USE_API_URL_PREFIX` settings:
 
 ![mcp-3](images/mcp-3.png)
 
+![mcp-4](images/mcp-4.png)
+
 ### Debugging MCP
 
 Test the MCP server with the inspector:
