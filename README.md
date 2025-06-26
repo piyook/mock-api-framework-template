@@ -378,6 +378,7 @@ With different `USE_API_URL_PREFIX` settings:
 
 - **Server Management**: Start, stop, rebuild, and check endpoints
 - **Endpoint Creation**: Generate new API endpoints via LLM
+- **Media Creation**: Ask the LLM to Generate images and videos to serve locally
 
 ![mcp-1](images/mcp-1.png)
 
