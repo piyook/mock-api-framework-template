@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { getApiEndpoints } from './helpers/get-all-endpoints.js';
 import { addApiEndpoint } from './helpers/add-api-endpoint.js';
 import { apiHandlerExample } from './data/api-handler-example.js';
+import { addMediaEndpoint } from './helpers/add-media-endpoint.js';
 import {
 	startMockServer,
 	stopMockServer,
@@ -149,6 +150,40 @@ server.tool(
 					],
 				};
 		}
+	},
+);
+server.tool(
+	'create_new_media_endpoint',
+	`create new media api endpoint for the local mock API server by saving a base64 encoded string of an image or video. This can be then be accessed from the endpoint at 
+	http://localhost:8000/api/{images|videos}/mediaName.fileType.
+	A list of ALL media files in a folder can be obtained from http://localhost:8000/api/{images|videos}/list.
+	Images and videos should be 1000px x 1000px.
+	Args:
+	- mediaName: file name for the media endpoint
+	- type: type of media (images or videos)
+	- fileType: type of file (png or mp4)
+	- image: base64 encoded image or video
+`,
+	{
+		mediaName: z.string().min(1, 'Media FileName is required'),
+		type: z.enum(['images', 'videos']),
+		fileType: z.enum(['png', 'mp4']),
+		image: z.string().base64(),
+	},
+	async (input) => {
+		return {
+			content: [
+				{
+					type: 'text',
+					text: await addMediaEndpoint(
+						input.mediaName,
+						input.type,
+						input.fileType,
+						input.image,
+					),
+				},
+			],
+		};
 	},
 );
 async function main() {
