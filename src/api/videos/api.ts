@@ -9,9 +9,10 @@ function handler(pathName: string) {
 		http.get(`/${pathName}`, ({ request: _request }) => {
 			const videos = fs.readdirSync('./src/resources/videos');
 			return HttpResponse.text(
-				`<body style="background-color: #383838; color:white">
+				`<style>a {color: lightblue; text-decoration: none} a:hover {text-decoration: underline}</style>
+				<body style="background-color: #383838; color:white">
                 <div style="text-align:center; padding:50px 0px 0px 0px">
-                <h4>Access videos stored in the src/resources/videos folder using the format: <span style="color:red">api/videos/{filename}</span></h4>
+                <h4>Access videos stored in the src/resources/videos folder using the format: <span style="color:pink">api/videos/{filename}</span></h4>
                 <h4>Example: api/videos/placeholder.mp4</h4>
 				<h4>Get a full list of videos as a json object at <a href="/api/videos/list">/videos/list</a> </h4>
 				<h4>Available video files in src/resources/videos folder:</h4>

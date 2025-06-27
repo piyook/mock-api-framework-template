@@ -10,14 +10,15 @@ function handler(pathName: string) {
 		http.get(`/${pathName}`, () => {
 			const images = fs.readdirSync('./src/resources/images');
 			return HttpResponse.text(
-				`<body style="background-color: #383838; color:white">
+				`<style>a {color: lightblue; text-decoration: none} a:hover {text-decoration: underline}</style>
+				<body style="background-color: #383838; color:white">
                 <div style="text-align:center; padding:50px 0px 0px 0px">
-                <h4>Access images stored in the src/resources/images folder using the format: <span style="color:red">api/images/{filename}</span></h4>
+                <h4>Access images stored in the src/resources/images folder using the format: <span style="color:pink">api/images/{filename}</span></h4>
 				<h4>Resize images by adding url paramters E.g placeholder.png?height=500&width=500</h4>
 				
 				<h4>Get a full list of images as a json object at <a href="/api/images/list">/images/list</a> </h4>
 				<h4>Available image files in src/resources/images folder:</h4>
-				<div>${images.map((image) => `<a href="/api/images/${image}">${image}</a></p>`).join('')}<div>
+				<div>${images.map((image) => `<p><a href="/api/images/${image}" >${image}</a></p>`).join('')}<div>
                 </div>
                 </body>
                 `,
