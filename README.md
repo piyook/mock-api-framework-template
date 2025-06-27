@@ -239,6 +239,24 @@ http://localhost:8000/api/images/placeholder.png
 http://localhost:8000/api/videos/sample.mp4
 ```
 
+#### Listing available media   
+
+List all available media by visiting the media root folder (/api/{images|videos}) in a browser or by sending a GET request to 
+
+```
+/api/{images|videos}/list
+```
+This path returns a JSON object describing the media type and available files in the /resources/{images|videos} folder.
+```
+{
+  "mediaType": "image",
+  "files": [
+    "placeholder.png",
+    "placeholder2.png"
+  ]
+}
+```
+
 #### Dynamic Image Resizing
 
 Resize PNG images by adding width and height parameters:
