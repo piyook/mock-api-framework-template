@@ -20,41 +20,41 @@
 		"mcp:debug": "npx @modelcontextprotocol/inspector node ./src/mcp/server.js"
 	},
 	"dependencies": {
-		"@faker-js/faker": "^9.8.0",
-		"@modelcontextprotocol/sdk": "^1.13.1",
+		"@faker-js/faker": "^10.0.0",
+		"@modelcontextprotocol/sdk": "^1.17.4",
 		"@mswjs/data": "^0.16.2",
 		"@mswjs/http-middleware": "^0.10.3",
 		"@types/chai-json-schema": "^1.4.10",
 		"@types/express": "^5.0.3",
 		"@types/markdown-it": "^14.1.2",
-		"@types/shelljs": "^0.8.16",
+		"@types/shelljs": "^0.8.17",
 		"chai-json-schema": "^1.5.1",
-		"dotenv": "^16.5.0",
+		"dotenv": "^17.2.1",
 		"highlight.js": "^11.11.1",
 		"markdown-it": "^14.1.0",
-		"msw": "^2.10.2",
-		"pretty-print-json": "^3.0.4",
-		"sharp": "^0.34.2",
+		"msw": "^2.10.5",
+		"pretty-print-json": "^3.0.5",
+		"sharp": "^0.34.3",
 		"shelljs": "^0.10.0",
-		"tsx": "^4.20.3",
-		"typescript": "^5.8.3",
-		"zod": "^3.25.67"
+		"tsx": "^4.20.5",
+		"typescript": "^5.9.2",
+		"zod": "^4.1.3"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^19.8.1",
 		"@commitlint/config-conventional": "^19.8.1",
-		"@types/aws-lambda": "^8.10.150",
-		"@types/node": "^24.0.4",
-		"cypress": "^14.5.0",
+		"@types/aws-lambda": "^8.10.152",
+		"@types/node": "^24.3.0",
+		"cypress": "^15.0.0",
 		"husky": "^9.1.7",
-		"lint-staged": "^16.1.2",
-		"oxlint": "^1.3.0",
-		"prettier": "3.6.1",
-		"start-server-and-test": "^2.0.12"
+		"lint-staged": "^16.1.5",
+		"oxlint": "^1.13.0",
+		"prettier": "3.6.2",
+		"start-server-and-test": "^2.0.13"
 	},
 	"lint-staged": {
 		"src/**/*.{js,jsx,ts,tsx}": "oxlint",
-		"src/**/*.{js,jsx,ts,tsx,css,scss,md}": "oxlint"
+		"src/**/*.{js,jsx,ts,tsx,css,scss,md}": "npx prettier --check"
 	},
 	"commitlint": {
 		"extends": [
