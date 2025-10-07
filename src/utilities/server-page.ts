@@ -89,7 +89,7 @@ const homePage = (apiPaths: string[]) => [
             }
             h1 {
                 text-align: center;
-                margin-bottom: 0.2em;
+                
             }
             .status-box {
                 display: flex;
@@ -194,10 +194,19 @@ const homePage = (apiPaths: string[]) => [
             h1 {
                 font-size: 2.4rem;
                 font-weight: 700;
-                margin: 0 0 12px 0;
                 letter-spacing: 1px;
                 text-align: center;
             }
+
+            h6 {
+            text-align:right;
+            font-style:italic;
+            font-weight:normal;
+            margin-top:0;
+            margin-right:50px;
+            color:var(--text-muted);
+            }
+
             .status {
                 display: inline-block;
                 color: #fff; /* Removed background here to be set dynamically */
@@ -361,6 +370,7 @@ const homePage = (apiPaths: string[]) => [
         </style>
         <main>
             <section class="info-sticky">
+              <h6 cy-data="server_version">Version: ${process.env?.npm_package_version ?? 'N/A'}</h6>
                 <h1>Mock Server</h1>
                 <div class="status-box" cy-data="server_status">
                     <span class="status" id="server-status">

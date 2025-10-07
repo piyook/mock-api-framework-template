@@ -1,5 +1,9 @@
 {
 	"type": "module",
+	"version": "2.2.2",
+	"name": "mock-api-server",
+	"description": "A mock API server for development and testing purposes.",
+	"author": "piyook",
 	"scripts": {
 		"dev": "tsx watch ./src/server.ts",
 		"start": "docker compose up -d",

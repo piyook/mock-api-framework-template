@@ -13,6 +13,7 @@ describe('Server page contains expected information', () => {
 			'/api/error',
 		];
 		cy.visit('/');
+		cy.get('[cy-data="server_version"]').contains('Version:');
 		cy.get('[cy-data="server_status"]').contains('Running');
 
 		cy.get('[cy-data="server_address"]').contains('Server Address');
