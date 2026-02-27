@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import fastify from 'fastify';
 import * as seeders from './seeders/index.js';
+import { dbFlushToDisk, dbLoadFromDisk } from './models/db.js';
 import getApiRoutes from './utilities/file-scan.js';
 import serverPage from './utilities/server-page.js';
 import logPage from './utilities/log-page.js';
@@ -21,9 +22,17 @@ if (process.env?.DELETE_LOGS_ON_SERVER_RESTART?.toUpperCase() === 'ON') {
 	deleteLogs();
 }
 
-// Execute dB seeder functions
-for (const seeder of Object.values(seeders)) {
-	seeder();
+const loaded = dbLoadFromDisk();
+
+const seedRequested =
+	process.env?.MOCK_DB_SEED_ON_START?.toUpperCase() === 'ON';
+
+const shouldSeed = seedRequested || !loaded;
+
+if (shouldSeed) {
+	for (const seeder of Object.values(seeders)) {
+		seeder();
+	}
 }
 
 try {
@@ -31,6 +40,15 @@ try {
 	console.log('\n*****************************************************');
 	console.log(`SERVER UP AND RUNNING ON LOCALHOST:${env.SERVER_PORT}`);
 	console.log('*****************************************************');
+
+	process.on('SIGINT', () => {
+		dbFlushToDisk();
+		process.exit(0);
+	});
+	process.on('SIGTERM', () => {
+		dbFlushToDisk();
+		process.exit(0);
+	});
 } catch (error) {
 	app.log.error(error);
 	process.exit(1);
