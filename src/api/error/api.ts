@@ -1,23 +1,27 @@
-import { http, HttpResponse } from 'msw';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
-function handler(pathName: string) {
-	return [
-		http.get(`/${pathName}`, ({ request }) => {
-			const url = new URL(request.url);
+type ErrorQuery = {
+	status?: string;
+	message?: string;
+};
 
-			const statusCode = Number.parseInt(
-				url.searchParams.get('status') ?? '404',
-				10,
-			);
+function registerErrorRoutes(app: FastifyInstance, pathName: string) {
+	app.get(
+		`/${pathName}`,
+		async (
+			request: FastifyRequest<{ Querystring: ErrorQuery }>,
+			reply: FastifyReply,
+		) => {
+			const { status, message } = request.query;
 
-			const errorMessage = url.searchParams.get('message') ?? 'Not Found';
+			const statusCode = Number.parseInt(status ?? '404', 10);
+			const errorMessage = message ?? 'Not Found';
 
-			return HttpResponse.json(
-				{ error: statusCode + ': ' + errorMessage },
-				{ status: statusCode },
-			);
-		}),
-	];
+			reply.code(statusCode).send({
+				error: `${statusCode}: ${errorMessage}`,
+			});
+		},
+	);
 }
 
-export default handler;
+export default registerErrorRoutes;

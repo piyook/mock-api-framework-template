@@ -1,21 +1,20 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { type HttpHandler } from 'msw';
+import type { FastifyInstance } from 'fastify';
 import { prefix } from './env';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 type ApiFile = Promise<{
-	default: (pathName: string) => HttpHandler[];
+	default: (app: FastifyInstance, pathName: string) => void;
 }>;
 
-export default async function getApiRoutes() {
+export default async function getApiRoutes(app: FastifyInstance) {
 	const apiRootDirectoryPath = `${__dirname}/../api`;
 
 	const apiFileImportPromises: ApiFile[] = [];
-	const apiHandlers: HttpHandler[] = [];
 	const apiRoutes: string[] = [];
 
 	const apiDirectories = fs.readdirSync(apiRootDirectoryPath);
@@ -32,7 +31,6 @@ export default async function getApiRoutes() {
 			apiRoutes.push(directory);
 
 			// Import the api.ts file (assuming it's in each directory) - this returns a promise
-
 			const importPromise = import(
 				`file://${path.join(filePath, 'api.ts')}`
 			) as ApiFile;
@@ -41,21 +39,17 @@ export default async function getApiRoutes() {
 		}
 	}
 
-	/* Return a promise.all to resolve when all promises resolve that will each themselves return the file 
-    with a default import (api handlers function) that can be imported with the api path */
+	/* Load all api modules and register their routes on the provided Fastify instance */
 	return Promise.all(apiFileImportPromises)
 		.then((files) => {
 			for (const [index, file] of files.entries()) {
-				/* Add new handlers with the desired apiPath to return array - remember to spread these out as may be 
-                more than one handler in return array */
-				apiHandlers.push(
-					...file.default(`${prefix}${apiRoutes[index]}`),
-				);
+				const routePath = `${prefix}${apiRoutes[index]}`;
+				file.default(app, routePath);
 			}
 		})
 		.then(() => {
-			// When all are resolved then return the handlers and api route names
-			return { apiHandlers, apiRoutes };
+			// When all are resolved then return the api route names
+			return { apiRoutes };
 		})
 		.catch((error: unknown) => {
 			// If any of the promises fail then throw an error
