@@ -1,15 +1,24 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { http, HttpResponse } from 'msw';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 
 // Add any http handler here (get, push , delete etc., and middleware as needed)
 
-function handler(pathName: string) {
-	return [
-		http.get(`/${pathName}`, ({ request: _request }) => {
+type VideoListResponse = {
+	mediaType: 'video';
+	files: string[];
+};
+
+type VideoParams = {
+	videoID: string;
+};
+
+function registerVideoRoutes(app: FastifyInstance, pathName: string) {
+	app.get(
+		`/${pathName}`,
+		async (_request: FastifyRequest, reply: FastifyReply) => {
 			const videos = fs.readdirSync('./src/resources/videos');
-			return HttpResponse.text(
-				`<style>a {color: lightblue; text-decoration: none} a:hover {text-decoration: underline}</style>
+			const html = `<style>a {color: lightblue; text-decoration: none} a:hover {text-decoration: underline}</style>
 				<body style="background-color: #383838; color:white">
                 <div style="text-align:center; padding:50px 0px 0px 0px">
                 <h4>Access videos stored in the src/resources/videos folder using the format: <span style="color:pink">api/videos/{filename}</span></h4>
@@ -19,55 +28,56 @@ function handler(pathName: string) {
 				<div>${videos.map((video) => `<a href="/api/videos/${video}">${video}</a></p>`).join('')}<div>
                 </div>
                 </body>
-                `,
-				{
-					headers: {
-						'Content-Type': 'text/html',
-						'Access-Control-Allow-Origin': '*',
-					},
-				},
-			);
-		}),
-		http.get(`/${pathName}/list`, () => {
-			return HttpResponse.json(
-				{
-					mediaType: 'video',
-					files: fs.readdirSync('./src/resources/videos'),
-				},
-				{},
-			);
-		}),
-		http.get(`/${pathName}/:videoID`, async ({ request }) => {
-			const url = new URL(request.url);
-			const params = url.pathname.split('/').pop();
+                `;
+
+			reply
+				.header('Content-Type', 'text/html')
+				.header('Access-Control-Allow-Origin', '*')
+				.send(html);
+		},
+	);
+
+	app.get(
+		`/${pathName}/list`,
+		async (
+			_request: FastifyRequest,
+			reply: FastifyReply<VideoListResponse>,
+		) => {
+			const files = fs.readdirSync('./src/resources/videos');
+			reply.send({ mediaType: 'video', files });
+		},
+	);
+
+	app.get(
+		`/${pathName}/:videoID`,
+		async (
+			request: FastifyRequest<{ Params: VideoParams }>,
+			reply: FastifyReply,
+		) => {
+			const { videoID } = request.params;
 
 			console.log(`starting ${pathName}`);
 
 			try {
 				const buffer = fs.readFileSync(
-					path.resolve(`./src/resources/videos/${params}`),
+					path.resolve(`./src/resources/videos/${videoID}`),
 				);
 
-				return new HttpResponse(buffer, {
-					headers: {
-						'Content-Type': 'video/mp4',
-						'Access-Control-Allow-Origin': '*',
-					},
-				});
+				reply
+					.header('Content-Type', 'video/mp4')
+					.header('Access-Control-Allow-Origin', '*')
+					.send(buffer);
 			} catch {
-				return HttpResponse.text(
-					'Error: File not found. Check file is in the src/resources/videos folder',
-					{
-						status: 404,
-						headers: {
-							'Content-Type': 'text/html',
-							'Access-Control-Allow-Origin': '*',
-						},
-					},
-				);
+				reply
+					.code(404)
+					.header('Content-Type', 'text/html')
+					.header('Access-Control-Allow-Origin', '*')
+					.send(
+						'Error: File not found. Check file is in the src/resources/videos folder',
+					);
 			}
-		}),
-	];
+		},
+	);
 }
 
-export default handler;
+export default registerVideoRoutes;

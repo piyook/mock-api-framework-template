@@ -1,10 +1,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { type DefaultBodyType } from 'msw';
 
 type LogData = {
-	data: DefaultBodyType;
+	data: unknown;
 	type?: string;
 	pathName: string;
 };

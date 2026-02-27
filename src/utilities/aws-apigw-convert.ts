@@ -1,33 +1,33 @@
-import type { DefaultBodyType, StrictRequest } from 'msw';
 import type { APIGatewayProxyEvent } from 'aws-lambda';
+import type { FastifyRequest } from 'fastify';
 
 /**
- * Converts a Express JS / MSW request object to a mock AWS API Gateway Proxy Event object.
+ * Converts a Fastify request object to a mock AWS API Gateway Proxy Event object.
  * For use when mocking AWS Lamda function that accept an AWS API Gateway Proxy Event
  *
- * @param {StrictRequest<DefaultBodyType>} request - The request object to convert.
+ * @param {FastifyRequest} request - The request object to convert.
  * @return {Promise<APIGatewayProxyEvent>} - The mock AWS API Gateway Proxy Event object.
  */
-const requestToApiGatewayProxyEvent = async (
-	request: StrictRequest<DefaultBodyType>,
-) => {
+const requestToApiGatewayProxyEvent = async (request: FastifyRequest) => {
 	// On aws its JSON.parse (event.body) to get the body as an object
 
 	const extractBodyPayload = async () => {
-		let payload: DefaultBodyType;
 		try {
-			payload = await request.json();
+			return JSON.stringify(request.body ?? {});
 		} catch {
 			throw new Error('Invalid Payload : must contain a body property');
 		}
-
-		return JSON.stringify(payload);
 	};
 
 	const extractQueryStringParameters = async () => {
-		const url = new URL(request.url);
-		const urlParamsEntries = url.searchParams.entries();
-		return Object.fromEntries(urlParamsEntries);
+		const query = request.query as Record<string, unknown> | undefined;
+		if (!query) return {};
+
+		const out: Record<string, string> = {};
+		for (const [key, value] of Object.entries(query)) {
+			if (typeof value === 'string') out[key] = value;
+		}
+		return out;
 	};
 
 	/*

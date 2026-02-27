@@ -1,6 +1,7 @@
 import 'dotenv/config';
-import { createServer } from '@mswjs/http-middleware';
+import fastify from 'fastify';
 import * as seeders from './seeders/index.js';
+import { dbFlushToDisk, dbLoadFromDisk } from './models/db.js';
 import getApiRoutes from './utilities/file-scan.js';
 import serverPage from './utilities/server-page.js';
 import logPage from './utilities/log-page.js';
@@ -8,28 +9,47 @@ import { deleteLogs } from './utilities/logger.js';
 import { apiList } from './utilities/api-list.js';
 import { env } from './utilities/env.js';
 
-const { apiHandlers, apiRoutes } = await getApiRoutes();
+const app = fastify();
 
-const httpServer = createServer(
-	...apiHandlers,
-	...serverPage(apiRoutes),
-	...logPage(),
-	...apiList(apiRoutes),
-);
+const { apiRoutes } = await getApiRoutes(app);
+
+serverPage(app, apiRoutes);
+logPage(app);
+apiList(app, apiRoutes);
 
 // Delete any logs on server start if the DELETE_LOGS_ON_SERVER_RESTART env var is set to 'ON'
 if (process.env?.DELETE_LOGS_ON_SERVER_RESTART?.toUpperCase() === 'ON') {
 	deleteLogs();
 }
 
-// Set up the server to listen on the specified port
-httpServer.listen(env.SERVER_PORT);
+const loaded = dbLoadFromDisk();
 
-// Execute dB seeder functions
-for (const seeder of Object.values(seeders)) {
-	seeder();
+const seedRequested =
+	process.env?.MOCK_DB_SEED_ON_START?.toUpperCase() === 'ON';
+
+const shouldSeed = seedRequested || !loaded;
+
+if (shouldSeed) {
+	for (const seeder of Object.values(seeders)) {
+		seeder();
+	}
 }
 
-console.log('\n*****************************************************');
-console.log(`SERVER UP AND RUNNING ON LOCALHOST:${env.SERVER_PORT}`);
-console.log('*****************************************************');
+try {
+	await app.listen({ port: Number(env.SERVER_PORT), host: '0.0.0.0' });
+	console.log('\n*****************************************************');
+	console.log(`SERVER UP AND RUNNING ON LOCALHOST:${env.SERVER_PORT}`);
+	console.log('*****************************************************');
+
+	process.on('SIGINT', () => {
+		dbFlushToDisk();
+		process.exit(0);
+	});
+	process.on('SIGTERM', () => {
+		dbFlushToDisk();
+		process.exit(0);
+	});
+} catch (error) {
+	app.log.error(error);
+	process.exit(1);
+}

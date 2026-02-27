@@ -1,9 +1,9 @@
 import 'dotenv/config';
-import { http, HttpResponse } from 'msw';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { env, prefix } from './env';
 
-const homePage = (apiPaths: string[]) => [
-	http.get(`/`, () => {
+const homePage = (app: FastifyInstance, apiPaths: string[]) => {
+	app.get('/', async (_request: FastifyRequest, reply: FastifyReply) => {
 		const htmlString = `
     <!DOCTYPE html>
     <html lang="en">
@@ -514,16 +514,13 @@ const homePage = (apiPaths: string[]) => [
     </body>
     </html>
     `;
-		return new HttpResponse(htmlString, {
-			headers: { 'Content-Type': 'text/html' },
-		});
-	}),
-	http.get(`/ping`, () => {
-		return HttpResponse.json(
-			{ response: 'server is running' },
-			{ status: 200 },
-		);
-	}),
-];
+
+		reply.header('Content-Type', 'text/html').send(htmlString);
+	});
+
+	app.get('/ping', async (_request: FastifyRequest, reply: FastifyReply) => {
+		reply.code(200).send({ response: 'server is running' });
+	});
+};
 
 export default homePage;
