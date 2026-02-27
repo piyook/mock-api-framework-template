@@ -1,47 +1,47 @@
 # Local Mock API Framework
 
-![GitHub Release](https://img.shields.io/github/v/release/piyook/mock-api-framework-template)
-![Github actions](https://github.com/piyook/mock-api-framework-template/actions/workflows/tests.yaml/badge.svg)
+[![GitHub Release](https://img.shields.io/github/v/release/piyook/mock-api-framework-template)](https://img.shields.io/github/v/release/piyook/mock-api-framework-template)
+[![Github actions](https://github.com/piyook/mock-api-framework-template/actions/workflows/tests.yaml/badge.svg)](https://github.com/piyook/mock-api-framework-template/actions/workflows/tests.yaml/badge.svg)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Table of Contents
 
 - [Overview](#overview)
 - [Quick Start](#quick-start)
-    - [Prerequisites](#prerequisites)
-    - [Installation & Setup](#installation--setup)
-    - [Alternative: Local Development](#alternative-local-development)
-    - [Useful Commands](#useful-commands)
+  - [Prerequisites](#prerequisites)
+  - [Installation & Setup](#installation--setup)
+  - [Alternative: Local Development](#alternative-local-development)
+  - [Useful Commands](#useful-commands)
 - [Creating API Endpoints](#creating-api-endpoints)
-    - [File-Based Routing](#1-file-based-routing)
-    - [Handler Implementation](#2-handler-implementation)
-    - [Database Integration](#3-database-integration-optional)
+  - [File-Based Routing](#1-file-based-routing)
+  - [Handler Implementation](#2-handler-implementation)
+  - [Database Integration](#3-database-integration-optional)
 - [Data Management](#data-management)
-    - [Seeding Options](#seeding-options)
-    - [Git LFS for Large Files](#git-lfs-for-large-files)
+  - [Seeding Options](#seeding-options)
+  - [Git LFS for Large Files](#git-lfs-for-large-files)
 - [Serving Static Resources](#serving-static-resources)
-    - [Images and Videos](#images-and-videos)
-    - [Markdown Files](#markdown-files)
-    - [JSON Files](#json-files)
+  - [Images and Videos](#images-and-videos)
+  - [Markdown Files](#markdown-files)
+  - [JSON Files](#json-files)
 - [Advanced Features](#advanced-features)
-    - [Custom Middleware](#custom-middleware)
-    - [Error Testing](#error-testing)
-    - [CORS Configuration](#cors-configuration)
-    - [AWS Lambda Development](#aws-lambda-development)
+  - [Custom Middleware](#custom-middleware)
+  - [Error Testing](#error-testing)
+  - [CORS Configuration](#cors-configuration)
+  - [AWS Lambda Development](#aws-lambda-development)
 - [Request Logging](#request-logging)
-    - [Enable Logging](#enable-logging)
-    - [Implement Logging](#implement-logging)
+  - [Enable Logging](#enable-logging)
+  - [Implement Logging](#implement-logging)
 - [Configuration](#configuration)
-    - [Environment Variables](#environment-variables)
-    - [URL Structure Examples](#url-structure-examples)
+  - [Environment Variables](#environment-variables)
+  - [URL Structure Examples](#url-structure-examples)
 - [MCP Server Integration (Experimental)](#mcp-server-integration-experimental)
-    - [Setup](#setup)
-    - [Available Tools](#available-tools)
-    - [Debugging MCP](#debugging-mcp)
-    - [Known Issues](#known-issues)
+  - [Setup](#setup)
+  - [Available Tools](#available-tools)
+  - [Debugging MCP](#debugging-mcp)
+  - [Known Issues](#known-issues)
 - [Development Workflow](#development-workflow)
-    - [Best Practices](#best-practices)
-    - [Folder Structure](#folder-structure)
+  - [Best Practices](#best-practices)
+  - [Folder Structure](#folder-structure)
 - [Contributing](#contributing)
 - [Resources](#resources)
 
@@ -49,7 +49,7 @@
 
 A quick-to-setup standalone local mock API framework for developing API endpoints on localhost. Perfect for testing API code, rapid prototyping, and developing frontend clients before deploying to live servers.
 
-Built with MSW and TypeScript, this framework can run directly on your local machine or in Docker containers.
+Built with **Fastify** and TypeScript, this framework can run directly on your local machine or in Docker containers.
 
 ### Key Features
 
@@ -72,19 +72,20 @@ Built with MSW and TypeScript, this framework can run directly on your local mac
 
 1. **Clone and install dependencies**
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
 2. **Start with Docker** (recommended)
 
-    ```bash
-    npm start
-    ```
+   ```bash
+   npm start
+   ```
 
 3. **View your APIs**
-    - Dashboard: http://localhost:8000/
-    - API list: http://localhost:8000/api
+
+   - Dashboard: http://localhost:8000/
+   - API list: http://localhost:8000/api
 
 ![main server page](images/image.png)
 
@@ -120,67 +121,93 @@ mkdir src/api/users
 
 ### 2. Handler Implementation
 
-Create `api.ts` in your new folder:
+Create `api.ts` in your new folder. Each handler is a Fastify plugin that receives the `FastifyInstance` and registers routes on it:
 
 ```typescript
 // src/api/users/api.ts
-import { http, HttpResponse } from 'msw';
+import type { FastifyInstance } from 'fastify';
 
-function handler(pathName: string) {
-	return [
-		http.get(`/${pathName}`, ({ request }) => {
-			// Your GET logic here
-			return HttpResponse.json({ users: [] });
-		}),
-		http.post(`/${pathName}`, ({ request }) => {
-			// Your POST logic here
-			return HttpResponse.json({ success: true });
-		}),
-	];
+async function handler(fastify: FastifyInstance, pathName: string) {
+	fastify.get(`/${pathName}`, async (request, reply) => {
+		// Your GET logic here
+		return reply.send({ users: [] });
+	});
+
+	fastify.post(`/${pathName}`, async (request, reply) => {
+		// Your POST logic here
+		const body = request.body;
+		return reply.send({ success: true });
+	});
 }
 
 export default handler;
+```
+
+#### Route Parameters
+
+Access dynamic path segments and query strings via the Fastify request object:
+
+```typescript
+// Dynamic path: /api/users/:id
+fastify.get(`/${pathName}/:id`, async (request, reply) => {
+	const { id } = request.params as { id: string };
+	return reply.send({ id });
+});
+
+// Query parameters: /api/bikes?type=KawasakiNinja
+fastify.get(`/${pathName}`, async (request, reply) => {
+	const { type } = request.query as { type: string };
+	return reply.send({ type });
+});
 ```
 
 ### 3. Database Integration (Optional)
 
 #### Create Models
 
-Models go in `/models` directory:
+Models go in the `/models` directory:
 
 ```typescript
 // models/users.ts
-import { primaryKey } from '@mswjs/data';
-
-export const userModel = {
-	id: primaryKey(String),
-	name: String,
-	email: String,
-};
+export interface UserModel {
+	id: string;
+	name: string;
+	email: string;
+}
 ```
 
-#### Register Models
+#### Manage Data
 
-Add to `db.ts`:
+Data is stored in `src/data/data.json`. You can read, write, and update it directly in your handlers:
 
 ```typescript
-import { userModel } from './models/users';
+import { readData, writeData } from '../../utilities/dataUtils';
 
-export const db = factory({
-	user: userModel,
-	// ... other models
+fastify.get(`/${pathName}`, async (request, reply) => {
+	const data = await readData();
+	return reply.send(data.users ?? []);
+});
+
+fastify.post(`/${pathName}`, async (request, reply) => {
+	const body = request.body as UserModel;
+	const data = await readData();
+	data.users = [...(data.users ?? []), body];
+	await writeData(data);
+	return reply.status(201).send(body);
 });
 ```
 
-#### Auto-Generated REST API
+#### REST Endpoints
 
-Using `db.user.toHandlers('rest')` automatically creates:
+Typical CRUD routes to implement for a resource:
 
-- `GET /users` - List all users
-- `GET /users/:id` - Get user by ID
-- `POST /users` - Create user
-- `PUT /users/:id` - Update user
-- `DELETE /users/:id` - Delete user
+| Method   | Path          | Description      |
+| -------- | ------------- | ---------------- |
+| `GET`    | `/users`      | List all users   |
+| `GET`    | `/users/:id`  | Get user by ID   |
+| `POST`   | `/users`      | Create user      |
+| `PUT`    | `/users/:id`  | Update user      |
+| `DELETE` | `/users/:id`  | Delete user      |
 
 ## Data Management
 
@@ -190,7 +217,7 @@ Choose one of three approaches:
 
 #### Option 1: Manual Data Entry
 
-Add data via POST/PUT requests (temporary, lost on restart)
+Add data via POST/PUT requests (temporary, lost on restart unless persisted to `data.json`)
 
 #### Option 2: Fake Data Generation
 
@@ -199,22 +226,23 @@ Use seeders with faker.js for random data:
 ```typescript
 // seeders/user-seeder.ts
 import { faker } from '@faker-js/faker';
-import { db } from '../db';
+import { writeData } from '../utilities/dataUtils';
 
-export function seedUsers() {
-	for (let i = 0; i < 10; i++) {
-		db.user.create({
-			id: faker.string.uuid(),
-			name: faker.person.fullName(),
-			email: faker.internet.email(),
-		});
-	}
+export async function seedUsers() {
+	const users = Array.from({ length: 10 }, () => ({
+		id: faker.string.uuid(),
+		name: faker.person.fullName(),
+		email: faker.internet.email(),
+	}));
+
+	const data = await readData();
+	await writeData({ ...data, users });
 }
 ```
 
 #### Option 3: Persistent Data
 
-Create `data.json` in `/data` folder for consistent data across restarts.
+Create or edit `data.json` in the `/data` folder for consistent data across restarts.
 
 ### Git LFS for Large Files
 
@@ -239,15 +267,17 @@ http://localhost:8000/api/images/placeholder.png
 http://localhost:8000/api/videos/sample.mp4
 ```
 
-#### Listing available media   
+#### Listing available media
 
-List all available media by visiting the media root folder (/api/{images|videos}) in a browser or by sending a GET request to 
+List all available media by visiting the media root folder (`/api/{images|videos}`) in a browser or by sending a GET request to:
 
 ```
 /api/{images|videos}/list
 ```
-This path returns a JSON object describing the media type and available files in the /resources/{images|videos} folder.
-```
+
+This path returns a JSON object describing the media type and available files in the `/resources/{images|videos}` folder:
+
+```json
 {
   "mediaType": "image",
   "files": [
@@ -285,14 +315,18 @@ http://localhost:8000/api/json/demo
 
 ### Custom Middleware
 
-Extract URL parameters and add custom logic:
+Register Fastify hooks or plugins to intercept or transform requests and responses:
 
 ```typescript
-// URL parameters: /api/bikes/?type=KawasakiNinja
-const type = url.searchParams.get('type');
+// Add a hook to all routes in a handler
+fastify.addHook('onRequest', async (request, reply) => {
+	// Custom logic before handler runs (e.g. auth checks, logging)
+});
 
-// Dynamic paths: /api/images/:imageId
-const imageId = url.pathname.split('/').pop();
+fastify.addHook('onSend', async (request, reply, payload) => {
+	// Transform the response payload before sending
+	return payload;
+});
 ```
 
 ### Error Testing
@@ -309,18 +343,33 @@ http://localhost:8000/api/error?status=500&message=Internal%20Server%20Error
 
 ### CORS Configuration
 
-Set CORS headers in your handlers:
+CORS is handled via the `@fastify/cors` plugin, which is registered globally. To customise allowed origins or methods, update the CORS config in `src/server.ts`:
 
 ```typescript
-headers: {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*', // or 'localhost:3000'
-}
+import cors from '@fastify/cors';
+
+await fastify.register(cors, {
+	origin: '*', // or 'http://localhost:3000'
+	methods: ['GET', 'POST', 'PUT', 'DELETE'],
+});
 ```
 
 ### AWS Lambda Development
 
-Develop Lambda functions in `src/lambdas` directory. Use `requestToApiGatewayProxyEvent` utility to convert MSW requests to AWS API Gateway format.
+Develop Lambda functions in `src/lambdas` directory. Use the `requestToApiGatewayProxyEvent` utility to convert a Fastify request object into an AWS API Gateway Proxy Event:
+
+```typescript
+import { requestToApiGatewayProxyEvent } from '../../utilities/lambdaUtils';
+import { myLambdaHandler } from '../../lambdas/my-lambda';
+
+fastify.get(`/${pathName}`, async (request, reply) => {
+	const event = requestToApiGatewayProxyEvent(request);
+	const result = await myLambdaHandler(event);
+	return reply.status(result.statusCode).send(result.body);
+});
+```
+
+Lambda functions created using `NodeJSFunction()` in the AWS CDK will be built and bundled using esbuild. Functions developed in this framework should work as expected, but it is recommended to verify behaviour using LocalStack or in a test AWS sandbox account.
 
 ## Request Logging
 
@@ -332,7 +381,7 @@ Monitor API requests and responses at `localhost:8000/logs`.
 
 Set environment variables in `.env`:
 
-```env
+```
 LOG_REQUESTS=ON
 DELETE_LOGS_ON_SERVER_RESTART=ON
 ```
@@ -357,7 +406,7 @@ logger({
 
 Customize your setup in `.env`:
 
-```env
+```
 # Change API prefix (default: "api")
 USE_API_URL_PREFIX=api
 
@@ -383,20 +432,21 @@ With different `USE_API_URL_PREFIX` settings:
 
 1. **Build MCP server**
 
-    ```bash
-    npm run mcp:build
-    ```
+   ```bash
+   npm run mcp:build
+   ```
 
 2. **Configure your LLM agent** with the server path:
-    ```bash
-    <path_to_project>/src/mcp/server.js
-    ```
+
+   ```
+   <path_to_project>/src/mcp/server.js
+   ```
 
 ### Available Tools
 
 - **Server Management**: Start, stop, rebuild, and check endpoints
 - **Endpoint Creation**: Generate new API endpoints via LLM
-- **Media Creation**: Ask the LLM to Generate images and videos to serve locally
+- **Media Creation**: Ask the LLM to generate images and videos to serve locally
 
 ![mcp-1](images/mcp-1.png)
 
@@ -437,7 +487,7 @@ npm run mcp:build
 
 1. **Development**: Use `npm run dev` for active development
 2. **Testing**: Use `npm start` for Docker-based testing
-3. **File Organization**: Follow the established folder structure
+3. **File Organisation**: Follow the established folder structure
 4. **Error Handling**: Test error scenarios using the error endpoint
 5. **Logging**: Enable logging during development for debugging
 
@@ -446,9 +496,10 @@ npm run mcp:build
 ```
 src/
 ├── api/                 # API endpoints (file-based routing)
-├── models/              # Database models
+├── models/              # TypeScript interfaces / data models
 ├── seeders/             # Database seeders
 ├── lambdas/             # AWS Lambda functions
+├── data/                # Persistent JSON data store
 ├── resources/           # Static files
 │   ├── images/
 │   ├── videos/
@@ -461,10 +512,10 @@ src/
 
 ## Contributing
 
-This project uses MIT license. For issues with the experimental MCP server, please report them at: https://github.com/piyook/mock-api-framework-template/issues
+This project uses the MIT license. For issues with the experimental MCP server, please report them at: https://github.com/piyook/mock-api-framework-template/issues
 
 ## Resources
 
-- [MSW Documentation](https://github.com/mswjs/msw)
-- [MSW Data Utilities](https://github.com/mswjs/data)
+- [Fastify Documentation](https://fastify.dev/docs/latest/)
+- [@fastify/cors](https://github.com/fastify/fastify-cors)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
