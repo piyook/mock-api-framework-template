@@ -24,7 +24,7 @@
 		"mcp:debug": "npx @modelcontextprotocol/inspector node ./src/mcp/server.js"
 	},
 	"dependencies": {
-		"fastify": "^5.1.0",
+		"fastify": "^5.7.4",
 		"@faker-js/faker": "^10.3.0",
 		"@modelcontextprotocol/sdk": "^1.27.1",
 		"@types/chai-json-schema": "^1.4.10",
@@ -42,14 +42,14 @@
 		"zod": "^4.3.6"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^20.4.2",
-		"@commitlint/config-conventional": "^20.4.2",
+		"@commitlint/cli": "^20.4.3",
+		"@commitlint/config-conventional": "^20.4.3",
 		"@types/aws-lambda": "^8.10.161",
-		"@types/node": "^25.3.2",
+		"@types/node": "^25.3.3",
 		"cypress": "^15.11.0",
 		"husky": "^9.1.7",
-		"lint-staged": "^16.2.7",
-		"oxlint": "^1.50.0",
+		"lint-staged": "^16.3.2",
+		"oxlint": "^1.51.0",
 		"prettier": "3.8.1",
 		"start-server-and-test": "^2.1.5"
 	},
