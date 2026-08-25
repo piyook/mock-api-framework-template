@@ -61,6 +61,6 @@ jobs:
               with:
                   start: |
                       npm run dev
-                  #   wait-on: 'http://localhost:8000'
-                  #   wait-on-timeout: 60
-                  #   browser: chrome
+                  wait-on: 'http://localhost:8000'
+                  wait-on-timeout: 60
+                  command: npm run cypress:run
